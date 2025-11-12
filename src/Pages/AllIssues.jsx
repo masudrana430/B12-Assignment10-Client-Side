@@ -32,33 +32,52 @@ export default function AllIssues() {
     ];
   }, [data]);
 
-  // UI filter state
+  // UI filter state (now includes search)
   const [filters, setFilters] = useState({
     category: "all",
     status: "all",
+    search: "",
   });
 
   const filtered = useMemo(() => {
+    const q = norm(filters.search);
+
     return data.filter((it) => {
       const catOk =
         filters.category === "all" || norm(it?.category) === filters.category;
+
       const st = norm(it?.status || "ongoing");
       const statusOk = filters.status === "all" || st === filters.status;
-      return catOk && statusOk;
+
+      // search across multiple fields
+      const haystack = [
+        it?.title,
+        it?.location,
+        it?.description,
+        it?.category,
+        it?.status,
+      ]
+        .map(norm)
+        .join(" ");
+
+      const searchOk = !q || haystack.includes(q);
+
+      return catOk && statusOk && searchOk;
     });
   }, [data, filters]);
 
-  const resetFilters = () => setFilters({ category: "all", status: "all" });
+  const resetFilters = () =>
+    setFilters({ category: "all", status: "all", search: "" });
 
   return (
     <Container>
       <div>
         <div className="text-2xl text-center font-bold">All Issues</div>
-        <p className="text-center mb-6">This page will display all issues.</p>
+        <p className="text-center mb-6">Browse, filter, and search issues.</p>
 
         {/* Filters */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Category */}
             <div className="form-control w-full max-w-xs">
               <label className="label">
@@ -98,6 +117,40 @@ export default function AllIssues() {
                 ))}
               </select>
             </div>
+
+            {/* Search */}
+            <div className="form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">Search</span>
+              </label>
+              <div className="join w-full">
+                <input
+                  type="search"
+                  className="input input-bordered join-item w-full"
+                  placeholder="Search title, location, description…"
+                  value={filters.search}
+                  onChange={(e) =>
+                    setFilters((f) => ({ ...f, search: e.target.value }))
+                  }
+                />
+                {filters.search ? (
+                  <button
+                    type="button"
+                    className="btn join-item"
+                    onClick={() =>
+                      setFilters((f) => ({ ...f, search: "" }))
+                    }
+                    aria-label="Clear search"
+                  >
+                    ✕
+                  </button>
+                ) : (
+                  <button className="btn join-item" disabled>
+                    🔎
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
@@ -119,7 +172,7 @@ export default function AllIssues() {
           </div>
         ) : (
           <div className="text-center py-16 opacity-70">
-            No issues match the selected filters.
+            No issues match the selected filters or search.
           </div>
         )}
       </div>
