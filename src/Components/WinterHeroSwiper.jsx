@@ -10,9 +10,14 @@ import {
 } from "swiper/modules";
 import { motion as Motion } from "framer-motion";
 
-import bow from "../assets/pozk9x87tf7z6u2pw8oxcudvlb1rtvuezhmygukm-removebg-preview.png";
+// import bow from "../assets/pozk9x87tf7z6u2pw8oxcudvlb1rtvuezhmygukm-removebg-preview.png";
 import scribble from "../assets/pngtree-medical-waste-concept-color-png-image_15643100-removebg-preview.png";
-import bone from "../assets/cdn.i.haymarketmedia-removebg-preview.png";
+// import bone from "../assets/cdn.i.haymarketmedia-removebg-preview.png";
+
+import Lottie from "lottie-react";
+// import errorImg from '../assets/error-404.png';
+import Camera from "./../animation/CCTV Camera.json";
+import Earth from "./../animation/Greenify the Earth (1).json";
 
 // Swiper styles
 import "swiper/css";
@@ -179,32 +184,21 @@ const WinterHeroSwiper = ({ slides = [] }) => {
                       )}
 
                       {/* doodles with subtle floating keyframes*/}
-                      <Motion.img
-                        src={bone}
-                        alt=""
-                        aria-hidden="true"
+                      <Lottie
+                        animationData={Camera}
+                        loop={true}
+                        
                         className="absolute top-0 right-1 w-30 h-30 object-contain drop-shadow pointer-events-none select-none"
-                        animate={{ y: [0, -6, 0], rotate: [0, 6, 0] }}
-                        transition={{
-                          duration: 3,
-                          repeat: Infinity,
-                          repeatType: "mirror",
-                          ease: "easeInOut",
-                        }}
                       />
+                      
 
-                      <Motion.img
-                        src={bow}
-                        alt=""
-                        aria-hidden="true"
+                      
+
+                      <Lottie
+                        animationData={Earth}
+                        loop={true}
+                        
                         className="absolute left-0 top-1/4 -translate-y-1/2 w-30 h-30 object-contain drop-shadow pointer-events-none select-none"
-                        animate={{ y: [0, -8, 0], rotate: [0, -6, 0] }}
-                        transition={{
-                          duration: 3.6,
-                          repeat: Infinity,
-                          repeatType: "mirror",
-                          ease: "easeInOut",
-                        }}
                       />
 
                       <Motion.img
@@ -237,9 +231,8 @@ const WinterHeroSwiper = ({ slides = [] }) => {
                           />
                         ))}
                       </div>
-                      
-                        {/* <SnowOverlay count={28} /> */}
-                  
+
+                      {/* <SnowOverlay count={28} /> */}
                     </div>
                   </Motion.div>
                 </div>
