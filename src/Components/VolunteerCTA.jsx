@@ -48,7 +48,7 @@ export default function VolunteerCTA() {
           </ul>
 
           <div className="mt-6 flex gap-3">
-            <button onClick={open} className="btn btn-primary">Join now</button>
+            <button onClick={open} className="btn btn-sm bg-[#36B864] text-white border border-[#1a6a3d] hover:bg-[#2da258]">Join now</button>
             <a href="/all-issues" className="btn btn-ghost">See local issues</a>
           </div>
         </div>

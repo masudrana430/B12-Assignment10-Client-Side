@@ -4,6 +4,7 @@ import logo from "../assets/Vector.png";
 import petImg1 from "../assets/Untitled__2_-removebg-preview.png";
 import petImg2 from "../assets/Untitled__3_-removebg-preview.png";
 import { MdOutlineMail, MdOutlinePhone, MdOutlineLocationOn } from "react-icons/md";
+import { FaXTwitter } from "react-icons/fa6"; // ✅ X (Twitter) icon
 
 function GooglePlayIcon(props) {
   return (
@@ -226,7 +227,20 @@ export default function Footer() {
           <div className="flex items-center gap-3">
             <span className="text-sm opacity-80">Stay connected</span>
             <span className="px-2 py-1 rounded bg-white/10 text-xs">Facebook</span>
-            <span className="px-2 py-1 rounded bg-white/10 text-xs">Twitter</span>
+
+            {/* ✅ Replaced Twitter badge with X icon + link */}
+            <a
+              href="https://x.com/ProCleaning"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Follow us on X"
+              className="px-2 py-1 rounded bg-white/10 text-xs inline-flex items-center justify-center"
+              title="Follow us on X"
+            >
+              <FaXTwitter className="h-4 w-4" />
+              <span className="sr-only">X</span>
+            </a>
+
             <span className="px-2 py-1 rounded bg-white/10 text-xs">Email Updates</span>
             <span className="px-2 py-1 rounded bg-white/10 text-xs">RSS</span>
           </div>

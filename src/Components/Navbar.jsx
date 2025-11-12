@@ -101,13 +101,13 @@ const Navbar = () => {
 
           {/* Brand */}
           <Link to="/" className="flex items-center gap-3 sm:gap-4 normal-case" aria-label="ProCleaning Home">
-            <img src={logo} alt="ProCleaning logo" className="h-10 w-auto md:h-12" />
+            <img src={logo} alt="ProCleaning logo" className="h-7 w-auto md:h-9" />
             <div className="leading-none select-none">
-              <div className="text-[1.75rem] md:text-[2rem] font-extrabold tracking-tight">
-                <h2>
+              <div className="text-[1rem] md:text-[1.5rem] font-extrabold tracking-tight">
+                <h5>
                   <span className="text-[#36B864]">Pro</span>{" "}
                   <span className="text-base-content">Cleaning</span>
-                </h2>
+                </h5>
               </div>
               <div className="mt-1 text-sm md:text-base text-base-content/70 tracking-[.02em]">
                 Cleaning Services company

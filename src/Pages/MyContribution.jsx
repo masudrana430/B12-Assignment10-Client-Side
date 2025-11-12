@@ -202,7 +202,7 @@ export default function MyContribution() {
             </p>
           </div>
           <button
-            className="btn btn-primary"
+            className="btn btn-sm bg-[#36B864] text-white border border-[#1a6a3d] hover:bg-[#2da258]"
             disabled={downloading || !rows.length}
             onClick={downloadAllReport}
           >

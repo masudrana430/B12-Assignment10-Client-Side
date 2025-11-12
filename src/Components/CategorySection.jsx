@@ -80,7 +80,7 @@ export default function CategorySection({ onSelect }) {
 
                 <Link
                   to={`/add-issues?category=${encodeURIComponent(key)}`}
-                  className="btn btn-primary btn-sm"
+                  className="btn btn-sm bg-[#36B864] text-white border border-[#1a6a3d] hover:bg-[#2da258]"
                   aria-label={`Report ${label} issue`}
                 >
                   Report

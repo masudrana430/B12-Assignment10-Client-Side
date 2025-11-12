@@ -142,7 +142,7 @@ const WinterHeroSwiper = ({ slides = [] }) => {
                       >
                         <Link
                           to={s.to || "/"}
-                          className="btn border-0 rounded-full bg-[#F8D548] hover:bg-[#e9c635] text-slate-900 font-semibold"
+                          className="btn border-0 rounded-full bg-[#36B864] hover:bg-[#2c8a4b] text-slate-900 font-semibold"
                         >
                           {s.cta || "Explore"}
                         </Link>

@@ -54,7 +54,7 @@ export default function IssuesTableCard({ issue, onAskDelete }) {
       <td><span className={`badge ${statusBadgeClass(status)}`}>{status || "ongoing"}</span></td>
 
       <td className="flex items-center gap-2">
-        <Link to={`/update-issues/${idStr}`} state={{ issue }} className="btn btn-update btn-sm" disabled={pending}>
+        <Link to={`/update-issues/${idStr}`} state={{ issue }} className="btn btn-sm bg-[#36B864] text-white border border-[#1a6a3d] hover:bg-[#2da258]" disabled={pending}>
           Update
         </Link>
 
