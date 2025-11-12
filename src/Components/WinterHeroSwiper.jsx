@@ -11,13 +11,14 @@ import {
 import { motion as Motion } from "framer-motion";
 
 // import bow from "../assets/pozk9x87tf7z6u2pw8oxcudvlb1rtvuezhmygukm-removebg-preview.png";
-import scribble from "../assets/pngtree-medical-waste-concept-color-png-image_15643100-removebg-preview.png";
+// import scribble from "../assets/pngtree-medical-waste-concept-color-png-image_15643100-removebg-preview.png";
 // import bone from "../assets/cdn.i.haymarketmedia-removebg-preview.png";
 
 import Lottie from "lottie-react";
 // import errorImg from '../assets/error-404.png';
 import Camera from "./../animation/CCTV Camera.json";
 import Earth from "./../animation/Greenify the Earth (1).json";
+import Report from "./../animation/Ai Report card.json";
 
 // Swiper styles
 import "swiper/css";
@@ -200,20 +201,14 @@ const WinterHeroSwiper = ({ slides = [] }) => {
                         
                         className="absolute left-0 top-1/4 -translate-y-1/2 w-30 h-30 object-contain drop-shadow pointer-events-none select-none"
                       />
-
-                      <Motion.img
-                        src={scribble}
-                        alt=""
-                        aria-hidden="true"
+                      <Lottie
+                        animationData={Report}
+                        loop={true}
+                        
                         className="absolute right-4 sm:right-0 bottom-10 w-20 h-20 object-contain drop-shadow pointer-events-none select-none"
-                        animate={{ y: [0, -5, 0], rotate: [0, 4, 0] }}
-                        transition={{
-                          duration: 2.8,
-                          repeat: Infinity,
-                          repeatType: "mirror",
-                          ease: "easeInOut",
-                        }}
                       />
+
+                      
 
                       {/* snow overlay (kept as CSS animation for perf) */}
                       <div className="pointer-events-none absolute inset-0 overflow-hidden">

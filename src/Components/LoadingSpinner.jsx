@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Lottie from "lottie-react";
-// import errorImg from '../assets/error-404.png';
 import ErrorAnimation1 from "./../animation/Ai loading model.json";
 
 const LoadingSpinner = () => {

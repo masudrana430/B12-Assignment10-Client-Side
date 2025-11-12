@@ -1,13 +1,26 @@
 // src/Components/CategorySection.jsx
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Lottie from "lottie-react";
+import Delete from "./../animation/Delete Files.json";
+import  Construction from "./../animation/Construction.json";
+import  BrokenHouse from "./../animation/Blue House.json";
+import  Road from "./../animation/Car driving on road.json";
+
 
 const CATS = [
   {
     key: "Garbage",
     label: "Garbage",
     desc: "Overflowing bins, littering, illegal dumping of waste.",
-    emoji: "🗑️",
+    emoji: (
+      <Lottie
+        animationData={Delete}
+        loop
+        className="h-12 w-12 shrink-0"
+        style={{ margin: 0 }}
+      />
+    ),
     ring: "ring-success",
     bg: "bg-success/10",
   },
@@ -15,7 +28,14 @@ const CATS = [
     key: "Illegal Construction",
     label: "Illegal Construction",
     desc: "Unapproved structures blocking roads/footpaths & public spaces.",
-    emoji: "🚧",
+    emoji: (
+      <Lottie
+        animationData={Construction}
+        loop
+        className="h-12 w-12 shrink-0"
+        style={{ margin: 0 }}
+      />
+    ),
     ring: "ring-warning",
     bg: "bg-warning/10",
   },
@@ -23,7 +43,14 @@ const CATS = [
     key: "Broken Public Property",
     label: "Broken Public Property",
     desc: "Damaged lights, benches, signs, bus stops or public utilities.",
-    emoji: "🛠️",
+    emoji: (
+      <Lottie
+        animationData={BrokenHouse}
+        loop
+        className="h-12 w-12 shrink-0"
+        style={{ margin: 0 }}
+      />
+    ),
     ring: "ring-info",
     bg: "bg-info/10",
   },
@@ -31,7 +58,14 @@ const CATS = [
     key: "Road Damage",
     label: "Road Damage",
     desc: "Potholes, cracks, waterlogging damage, unsafe road surfaces.",
-    emoji: "🛣️",
+    emoji: (
+      <Lottie
+        animationData={Road}
+        loop
+        className="h-12 w-12 shrink-0"
+        style={{ margin: 0 }}
+      />
+    ),
     ring: "ring-error",
     bg: "bg-error/10",
   },
@@ -56,12 +90,15 @@ export default function CategorySection({ onSelect }) {
 
       <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {CATS.map(({ key, label, desc, emoji, ring, bg }) => (
-          <div key={key} className="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
+          <div
+            key={key}
+            className="card bg-base-100 shadow-md hover:shadow-lg transition-shadow"
+          >
             <div className="card-body">
               <div className="flex items-center gap-3">
                 <div className={`avatar placeholder ${ring}`}>
                   <div className={`w-12 rounded-full ${bg} ring-2`}>
-                    <span className="text-xl select-none">{emoji}</span>
+                    {emoji}
                   </div>
                 </div>
                 <h3 className="card-title text-xl">{label}</h3>

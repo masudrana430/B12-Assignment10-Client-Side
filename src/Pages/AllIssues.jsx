@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { useLoaderData } from "react-router";
+import { motion as Motion } from "framer-motion";
 import IssuesCard from "../Components/IssuesCard";
 import Container from "../Components/Container";
 
@@ -11,6 +12,27 @@ const STATUS_OPTIONS = [
   { value: "in-progress", label: "In-Progress" },
   { value: "resolved", label: "Resolved" },
 ];
+
+// Animation variants
+const gridVariants = {
+  hidden: { opacity: 1 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 export default function AllIssues() {
   const data = useLoaderData() || [];
@@ -32,7 +54,7 @@ export default function AllIssues() {
     ];
   }, [data]);
 
-  // UI filter state (now includes search)
+  // UI filter state (includes search)
   const [filters, setFilters] = useState({
     category: "all",
     status: "all",
@@ -137,9 +159,7 @@ export default function AllIssues() {
                   <button
                     type="button"
                     className="btn join-item"
-                    onClick={() =>
-                      setFilters((f) => ({ ...f, search: "" }))
-                    }
+                    onClick={() => setFilters((f) => ({ ...f, search: "" }))}
                     aria-label="Clear search"
                   >
                     ✕
@@ -163,17 +183,35 @@ export default function AllIssues() {
           </div>
         </div>
 
-        {/* Grid */}
+        {/* Animated Grid */}
         {filtered.length ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+            variants={gridVariants}
+            initial="hidden"
+            animate="show"
+            // re-run stagger when filters/search change
+            key={`${filters.category}-${filters.status}-${filters.search}`}
+          >
             {filtered.map((issue) => (
-              <IssuesCard key={issue._id} issue={issue} />
+              <Motion.div
+                key={issue._id}
+                variants={cardVariants}
+                whileHover={{ y: -6 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              >
+                <IssuesCard issue={issue} />
+              </Motion.div>
             ))}
-          </div>
+          </Motion.div>
         ) : (
-          <div className="text-center py-16 opacity-70">
+          <Motion.div
+            className="text-center py-16 opacity-70"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
             No issues match the selected filters or search.
-          </div>
+          </Motion.div>
         )}
       </div>
     </Container>

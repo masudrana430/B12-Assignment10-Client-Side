@@ -5,6 +5,14 @@ import logo from "../assets/Vector.png";
 import { AuthContext } from "../Provider/AuthProvider";
 import { toast } from "react-toastify";
 import ThemeToggle from "./ThemeToggle";
+import Lottie from "lottie-react";
+import Home from "./../animation/Home.json";
+import Issue from "./../animation/Search.json";
+import AddIssue from "./../animation/Add Document.json";
+import MYIssue from "./../animation/solving problems.json";
+import Donation from "./../animation/Donaciones.json";
+import Issues from "./../animation/Problem Solving Team..json";
+
 
 const navLinkClasses = ({ isActive }) =>
   [
@@ -32,21 +40,101 @@ const Navbar = () => {
 
   const links = isAuthed
     ? [
-        { to: "/", label: "Home", end: true },
-        { to: "/all-issues", label: "All Issues" },
-        { to: "/add-issues", label: "Add Issues" },
-        { to: "/my-issues", label: "My Issues" },
-        { to: "/my-contribution", label: "My Contribution" },
+        {
+          to: "/",
+          label: "Home",
+          end: true,
+          emoji: (
+            <Lottie
+              animationData={Home}
+              loop
+              className="h-12 w-12 shrink-0"
+              style={{ margin: 0 }}
+            />
+          ),
+        },
+        {
+          to: "/all-issues",
+          label: "All Issues",
+          emoji: (
+            <Lottie
+              animationData={Issue}
+              loop
+              className="h-12 w-12 shrink-0"
+              style={{ margin: 0 }}
+            />
+          ),
+        },
+        {
+          to: "/add-issues",
+          label: "Add Issues",
+          emoji: (
+            <Lottie
+              animationData={AddIssue}
+              loop
+              className="h-12 w-12 shrink-0"
+              style={{ margin: 0 }}
+            />
+          ),
+        },
+        {
+          to: "/my-issues",
+          label: "My Issues",
+          emoji: (
+            <Lottie
+              animationData={MYIssue}
+              loop
+              className="h-12 w-12 shrink-0"
+              style={{ margin: 0 }}
+            />
+          ),
+        },
+        {
+          to: "/my-contribution",
+          label: "My Contribution",
+          emoji: (
+            <Lottie
+              animationData={Donation}
+              loop
+              className="h-12 w-12 shrink-0"
+              style={{ margin: 0 }}
+            />
+          ),
+        },
       ]
     : [
-        { to: "/", label: "Home", end: true },
-        { to: "/issues", label: "Issues" },
+        {
+          to: "/",
+          label: "Home",
+          end: true,
+          emoji: (
+            <Lottie
+              animationData={Home}
+              loop
+              className="h-12 w-12 shrink-0"
+              style={{ margin: 0 }}
+            />
+          ),
+        },
+        {
+          to: "/issues",
+          label: "Issues",
+          emoji: (
+            <Lottie
+              animationData={Issues}
+              loop
+              className="h-12 w-12 shrink-0"
+              style={{ margin: 0 }}
+            />
+          ),
+        },
       ];
 
   const renderLinks = () =>
-    links.map(({ to, label, end }) => (
+    links.map(({ to, label, end , emoji }) => (
       <li key={to}>
-        <NavLink to={to} end={end} className={navLinkClasses}>
+        <NavLink to={to} end={end} className={navLinkClasses} style={{display: 'flex', alignItems: 'center', gap: '2px'}}>
+          {emoji}
           {label}
         </NavLink>
       </li>
@@ -60,8 +148,19 @@ const Navbar = () => {
           {/* Mobile menu */}
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M4 6h16M4 12h8m-8 6h16"
+                />
               </svg>
             </div>
             <ul
@@ -100,8 +199,16 @@ const Navbar = () => {
           </div>
 
           {/* Brand */}
-          <Link to="/" className="flex items-center gap-3 sm:gap-4 normal-case" aria-label="ProCleaning Home">
-            <img src={logo} alt="ProCleaning logo" className="h-7 w-auto md:h-9" />
+          <Link
+            to="/"
+            className="flex items-center gap-3 sm:gap-4 normal-case"
+            aria-label="ProCleaning Home"
+          >
+            <img
+              src={logo}
+              alt="ProCleaning logo"
+              className="h-7 w-auto md:h-9"
+            />
             <div className="leading-none select-none">
               <div className="text-[1rem] md:text-[1.5rem] font-extrabold tracking-tight">
                 <h5>
@@ -150,7 +257,11 @@ const Navbar = () => {
                     loading="lazy"
                     onError={(e) => {
                       e.currentTarget.onerror = null;
-                      const name = (user?.displayName || user?.email || "Guest").split("@")[0];
+                      const name = (
+                        user?.displayName ||
+                        user?.email ||
+                        "Guest"
+                      ).split("@")[0];
                       e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
                         name
                       )}&background=36B864&color=ffffff&size=80&bold=true`;
@@ -163,7 +274,9 @@ const Navbar = () => {
                 className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-56"
               >
                 <li className="menu-title px-2">
-                  <span className="truncate">{user?.displayName || user?.email}</span>
+                  <span className="truncate">
+                    {user?.displayName || user?.email}
+                  </span>
                 </li>
                 <li>
                   <Link to="/my-profile">My Profile</Link>
