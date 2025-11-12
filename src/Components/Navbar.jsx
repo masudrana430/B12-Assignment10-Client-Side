@@ -1,0 +1,183 @@
+import React, { useContext } from "react";
+import { Link, NavLink } from "react-router-dom";
+import Container from "./Container";
+import logo from "../assets/Vector.png";
+import { AuthContext } from "../Provider/AuthProvider";
+import { toast } from "react-toastify";
+import ThemeToggle from "./ThemeToggle";
+
+const navLinkClasses = ({ isActive }) =>
+  [
+    "inline-block text-[16px] font-semibold transition-colors",
+    isActive
+      ? "bg-[#36B864] bg-clip-text text-transparent"
+      : "text-base-content hover:bg-gradient-to-r hover:from-[#632EE3] hover:to-[#F8721F] hover:bg-clip-text hover:text-transparent",
+  ].join(" ");
+
+const getAvatarUrl = (user) => {
+  if (user?.photoURL) return user.photoURL;
+  const seed = user?.email || user?.displayName || user?.uid || "guest";
+  return `https://i.pravatar.cc/80?u=${encodeURIComponent(seed)}`;
+};
+
+const Navbar = () => {
+  const { user, logOut } = useContext(AuthContext);
+  const isAuthed = !!user?.uid;
+
+  const handleLogOut = () => {
+    logOut()
+      .then(() => toast.success("Logged out successfully"))
+      .catch((err) => console.error("Error logging out:", err));
+  };
+
+  const links = isAuthed
+    ? [
+        { to: "/", label: "Home", end: true },
+        { to: "/all-issues", label: "All Issues" },
+        { to: "/add-issues", label: "Add Issues" },
+        { to: "/my-issues", label: "My Issues" },
+        { to: "/my-contribution", label: "My Contribution" },
+      ]
+    : [
+        { to: "/", label: "Home", end: true },
+        { to: "/issues", label: "Issues" },
+      ];
+
+  const renderLinks = () =>
+    links.map(({ to, label, end }) => (
+      <li key={to}>
+        <NavLink to={to} end={end} className={navLinkClasses}>
+          {label}
+        </NavLink>
+      </li>
+    ));
+
+  return (
+    <Container>
+      <div className="navbar bg-base-100 shadow-sm">
+        {/* Left */}
+        <div className="navbar-start">
+          {/* Mobile menu */}
+          <div className="dropdown">
+            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
+              </svg>
+            </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
+            >
+              {renderLinks()}
+              {!isAuthed ? (
+                <>
+                  <li>
+                    <NavLink to="/auth/login" className={navLinkClasses}>
+                      Login
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/auth/register" className={navLinkClasses}>
+                      Register
+                    </NavLink>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <NavLink to="/my-profile" className={navLinkClasses}>
+                      My Profile
+                    </NavLink>
+                  </li>
+                  <li>
+                    <button onClick={handleLogOut} className="text-left">
+                      Logout
+                    </button>
+                  </li>
+                </>
+              )}
+            </ul>
+          </div>
+
+          {/* Brand */}
+          <Link to="/" className="flex items-center gap-3 sm:gap-4 normal-case" aria-label="ProCleaning Home">
+            <img src={logo} alt="ProCleaning logo" className="h-10 w-auto md:h-12" />
+            <div className="leading-none select-none">
+              <div className="text-[1.75rem] md:text-[2rem] font-extrabold tracking-tight">
+                <h2>
+                  <span className="text-[#36B864]">Pro</span>{" "}
+                  <span className="text-base-content">Cleaning</span>
+                </h2>
+              </div>
+              <div className="mt-1 text-sm md:text-base text-base-content/70 tracking-[.02em]">
+                Cleaning Services company
+              </div>
+            </div>
+          </Link>
+        </div>
+
+        {/* Center (desktop) */}
+        <div className="navbar-center hidden lg:flex">
+          <ul className="menu menu-horizontal px-1">{renderLinks()}</ul>
+        </div>
+
+        {/* Right */}
+        <div className="navbar-end gap-3">
+          {/* Theme toggle */}
+          <ThemeToggle />
+
+          {!isAuthed ? (
+            <>
+              <NavLink
+                to="/auth/login"
+                className="btn border text-black bg-[#F4E11B] border-[#02000F] rounded-[40px] hover:bg-[#e0cb16]"
+              >
+                Login
+              </NavLink>
+              <NavLink to="/auth/register" className="btn btn-ghost">
+                Register
+              </NavLink>
+            </>
+          ) : (
+            // Avatar dropdown (Logout inside)
+            <div className="dropdown dropdown-end">
+              <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full border border-base-300 overflow-hidden">
+                  <img
+                    src={getAvatarUrl(user)}
+                    alt="User avatar"
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      const name = (user?.displayName || user?.email || "Guest").split("@")[0];
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                        name
+                      )}&background=36B864&color=ffffff&size=80&bold=true`;
+                    }}
+                  />
+                </div>
+              </label>
+              <ul
+                tabIndex={0}
+                className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-56"
+              >
+                <li className="menu-title px-2">
+                  <span className="truncate">{user?.displayName || user?.email}</span>
+                </li>
+                <li>
+                  <Link to="/my-profile">My Profile</Link>
+                </li>
+                <li>
+                  <button onClick={handleLogOut}>Logout</button>
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </Container>
+  );
+};
+
+export default Navbar;
