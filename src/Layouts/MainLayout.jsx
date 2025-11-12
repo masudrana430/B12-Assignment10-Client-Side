@@ -6,6 +6,8 @@ import Container from "../Components/Container";
 import useApps from "../hooks/useApps";
 import LoadingSpinnerCopy from "../Components/LoadingSpinnercopy";
 import AOS from "aos";
+import { ToastContainer } from "react-toastify";
+import "aos/dist/aos.css";
 
 const MainLayout = () => {
   const { loading } = useApps();
@@ -32,6 +34,19 @@ const MainLayout = () => {
       </main>
 
       <Footer />
+      {/* ✅ Toasts live here, once for the whole app */}
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+        toastStyle={{ zIndex: 999999 }}  // keeps it above modals/navbars
+      />
     </div>
   );
 };

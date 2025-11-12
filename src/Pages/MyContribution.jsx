@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import Container from "../Components/Container";
 import { AuthContext } from "../Provider/AuthProvider";
 import { toast } from "react-toastify";
+import LoadingSpinnercopy from "../Components/LoadingSpinnercopy";
 
 const API = import.meta.env.VITE_API_BASE || "https://b12-a10-copy-server.vercel.app";
 
@@ -184,9 +185,7 @@ export default function MyContribution() {
   if (loading) {
     return (
       <Container>
-        <div className="min-h-[50vh] grid place-items-center">
-          <span className="loading loading-spinner loading-lg" />
-        </div>
+        <LoadingSpinnercopy />
       </Container>
     );
   }

@@ -4,6 +4,8 @@ import { AuthContext } from "../Provider/AuthProvider";
 import Container from "../Components/Container";
 import IssuesTableCard from "../Components/IssuesTableCard";
 import DeleteIssueModal from "./DeleteIssueModal";
+// import LoadingSpinner from "../Components/LoadingSpinner";
+import LoadingSpinnercopy from "../Components/LoadingSpinnercopy";
 
 const MyIssues = () => {
   const { user } = use(AuthContext);
@@ -34,7 +36,7 @@ const MyIssues = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div> <Container> <LoadingSpinnercopy /></Container></div>;
   }
   return (
     <Container>

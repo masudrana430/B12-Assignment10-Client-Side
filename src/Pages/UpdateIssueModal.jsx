@@ -189,7 +189,7 @@ export default function UpdateIssueModal() {
 
   return (
     <Container>
-      <div className="card bg-base-100 w-full max-w-2xl mx-auto shadow-2xl rounded-2xl">
+      <div className=" mb-12 md:mb-16 mt-12 md:mt-16 card bg-base-100 w-full max-w-2xl mx-auto shadow-2xl rounded-2xl">
         <div className="card-body p-6">
           <h2 className="text-2xl font-bold text-center mb-6">Update Issue</h2>
 
@@ -306,7 +306,10 @@ export default function UpdateIssueModal() {
               </button>
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="
+              btn btn-sm border border-[#1a6a3d]
+              bg-[#36B864] text-white hover:bg-[#2da258]
+            "
                 disabled={pending}
               >
                 {pending ? (

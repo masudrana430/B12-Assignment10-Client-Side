@@ -1,11 +1,20 @@
 import React, { useContext, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { AuthContext } from "../Provider/AuthProvider";
+import Container from "../Components/Container";
+import {
+  MdOutlineTitle,
+  MdOutlineCategory,
+  MdOutlineLocationOn,
+  MdOutlineImage,
+  MdOutlinePayments,
+} from "react-icons/md";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE || "https://b12-a10-copy-server.vercel.app";
 
 const CATEGORIES = ["Garbage", "Footpath", "Dumping", "Waterlogging"];
+const MAX_DESC = 500;
 
 const AddIssues = () => {
   const { user } = useContext(AuthContext);
@@ -18,19 +27,29 @@ const AddIssues = () => {
     description: "",
     image: "",
     amount: "",
-    status: "ongoing", // default per spec
+    status: "ongoing",
   });
 
-  // display-only date (not an input)
-  const todayDisplay = useMemo(
-    () => new Date().toLocaleString(),
-    [] // compute once on mount
-  );
+  const todayDisplay = useMemo(() => new Date().toLocaleString(), []);
 
   const onChange = (key) => (e) => {
     const v = e.target.value;
-    setForm((f) => ({ ...f, [key]: v }));
+    setForm((f) => ({
+      ...f,
+      [key]: key === "description" ? v.slice(0, MAX_DESC) : v,
+    }));
   };
+
+  const resetForm = () =>
+    setForm({
+      title: "",
+      category: CATEGORIES[0],
+      location: "",
+      description: "",
+      image: "",
+      amount: "",
+      status: "ongoing",
+    });
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -38,23 +57,21 @@ const AddIssues = () => {
     // Basic validation
     if (!form.title?.trim()) return toast.warn("Please enter issue title");
     if (!form.location?.trim()) return toast.warn("Please enter location");
-    if (!form.description?.trim())
-      return toast.warn("Please enter description");
+    if (!form.description?.trim()) return toast.warn("Please enter description");
     const amountNum = Number(form.amount);
     if (!amountNum || amountNum <= 0)
       return toast.warn("Please enter a valid budget amount (BDT)");
 
-    // Build payload for MongoDB
     const payload = {
       title: form.title.trim(),
       category: form.category,
       location: form.location.trim(),
       description: form.description.trim(),
-      image: form.image?.trim(), // URL; optional but recommended
+      image: form.image?.trim(),
       amount: amountNum,
       status: form.status || "ongoing",
-      date: new Date(), // saved value (Date object → ISO in Mongo)
-      email: user?.email || "", // logged-in user email
+      date: new Date(),
+      email: user?.email || "",
     };
 
     try {
@@ -71,16 +88,7 @@ const AddIssues = () => {
       }
 
       toast.success("Issue submitted successfully!");
-      // Reset the form (or navigate to /my-issues)
-      setForm({
-        title: "",
-        category: CATEGORIES[0],
-        location: "",
-        description: "",
-        image: "",
-        amount: "",
-        status: "ongoing",
-      });
+      resetForm();
     } catch (err) {
       console.error(err);
       toast.error("Failed to submit issue");
@@ -90,179 +98,253 @@ const AddIssues = () => {
   };
 
   return (
-    <div className="mx-auto max-w-3xl p-4">
-      <h2 className="text-3xl font-bold text-center mt-4">Add Issues</h2>
-      <p className="text-center text-slate-600 mt-1">
-        Report a cleanliness or public space-related issue in your area.
-      </p>
-
-      <form onSubmit={onSubmit} className="mt-8 grid gap-4">
-        {/* Title */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Issue Title</span>
-          </label>
-          <input
-            type="text"
-            className="input input-bordered"
-            placeholder="e.g., Garbage spilling over near Road 8"
-            value={form.title}
-            onChange={onChange("title")}
-            required
-          />
-        </div>
-
-        {/* Category */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Category</span>
-          </label>
-          <select
-            className="select select-bordered"
-            value={form.category}
-            onChange={onChange("category")}
-            required
-          >
-            {CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Location */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Location</span>
-          </label>
-          <input
-            type="text"
-            className="input input-bordered"
-            placeholder="e.g., Mohakhali, Dhaka"
-            value={form.location}
-            onChange={onChange("location")}
-            required
-          />
-        </div>
-
-        {/* Description */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Description</span>
-          </label>
-          <textarea
-            className="textarea textarea-bordered"
-            rows={4}
-            placeholder="Describe the issue clearly"
-            value={form.description}
-            onChange={onChange("description")}
-            required
-          />
-        </div>
-
-        {/* Image (URL) + preview */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Image URL</span>
-          </label>
-          <input
-            type="url"
-            className="input input-bordered"
-            placeholder="https://…"
-            value={form.image}
-            onChange={onChange("image")}
-          />
-          {form.image ? (
-            <div className="mt-3 rounded-lg overflow-hidden border">
-              <img
-                src={form.image}
-                alt="Issue preview"
-                className="w-full h-56 object-cover"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src =
-                    "https://placehold.co/800x520?text=Preview+Not+Available";
-                }}
-              />
+    <Container>
+      <div className="max-w-5xl mx-auto py-8">
+        {/* Header panel */}
+        <div className="rounded-2xl bg-gradient-to-r from-[#36B864] to-[#2da258] text-white p-6 shadow-md">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-extrabold">
+                Report a Community Issue
+              </h2>
+              <p className="opacity-90">
+                Help keep your neighborhood cleaner and safer.
+              </p>
             </div>
-          ) : (
-            <p className="mt-2 text-xs text-slate-500">
-              Paste a direct image URL (or leave blank).
-            </p>
-          )}
+            <div className="text-sm md:text-right">
+              <div>
+                <span className="opacity-80">Reporter:</span>{" "}
+                <span className="font-semibold">{user?.email || "—"}</span>
+              </div>
+              <div>
+                <span className="opacity-80">Date:</span>{" "}
+                <span className="font-semibold">{todayDisplay}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Amount */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">
-              Amount (Suggested Fix Budget) — BDT
-            </span>
-          </label>
-          <input
-            type="number"
-            min="1"
-            className="input input-bordered"
-            placeholder="e.g., 200"
-            value={form.amount}
-            onChange={onChange("amount")}
-            required
-          />
+        {/* Form card */}
+        <div className="card bg-base-100 shadow-xl mt-6 border">
+          <div className="card-body p-6 md:p-8">
+            <form onSubmit={onSubmit} className="grid grid-cols-1 gap-6">
+              {/* Row: title + category */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Title */}
+                <div className="md:col-span-2">
+                  <label className="label">
+                    <span className="label-text">Issue Title</span>
+                  </label>
+                  <label className="input input-bordered flex items-center gap-2">
+                    <MdOutlineTitle className="text-base-content/60 text-lg" />
+                    <input
+                      type="text"
+                      className="grow"
+                      placeholder="e.g., Garbage spilling over near Road 8"
+                      value={form.title}
+                      onChange={onChange("title")}
+                      required
+                    />
+                  </label>
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className="label">
+                    <span className="label-text">Category</span>
+                  </label>
+                  <label className="input input-bordered flex items-center gap-2">
+                    <MdOutlineCategory className="text-base-content/60 text-lg" />
+                    <select
+                      className="grow bg-transparent outline-none"
+                      value={form.category}
+                      onChange={onChange("category")}
+                      required
+                    >
+                      {CATEGORIES.map((c) => (
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+              </div>
+
+              {/* Row: location */}
+              <div>
+                <label className="label">
+                  <span className="label-text">Location</span>
+                </label>
+                <label className="input input-bordered flex items-center gap-2">
+                  <MdOutlineLocationOn className="text-base-content/60 text-lg" />
+                  <input
+                    type="text"
+                    className="grow"
+                    placeholder="e.g., Mohakhali, Dhaka"
+                    value={form.location}
+                    onChange={onChange("location")}
+                    required
+                  />
+                </label>
+                <p className="mt-1 text-xs text-base-content/60">
+                  Be specific: street, landmark, area name, etc.
+                </p>
+              </div>
+
+              {/* Row: description */}
+              <div>
+                <div className="flex items-center justify-between">
+                  <label className="label">
+                    <span className="label-text">Description</span>
+                  </label>
+                  <span className="text-xs opacity-60">
+                    {form.description.length}/{MAX_DESC}
+                  </span>
+                </div>
+                <textarea
+                  className="textarea textarea-bordered w-full"
+                  rows={5}
+                  placeholder="Describe the issue clearly (what, where, severity, hazards)"
+                  value={form.description}
+                  onChange={onChange("description")}
+                  required
+                />
+              </div>
+
+              {/* Row: image + amount + status */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Image URL */}
+                <div className="md:col-span-2">
+                  <label className="label">
+                    <span className="label-text">Image URL (optional)</span>
+                  </label>
+                  <label className="input input-bordered flex items-center gap-2">
+                    <MdOutlineImage className="text-base-content/60 text-lg" />
+                    <input
+                      type="url"
+                      className="grow"
+                      placeholder="https://example.com/photo.jpg"
+                      value={form.image}
+                      onChange={onChange("image")}
+                    />
+                  </label>
+
+                  {/* Preview */}
+                  <div className="mt-3 rounded-xl overflow-hidden border bg-base-200/60">
+                    {form.image ? (
+                      <img
+                        src={form.image}
+                        alt="Issue preview"
+                        className="w-full h-56 object-cover"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src =
+                            "https://placehold.co/800x520?text=Preview+Not+Available";
+                        }}
+                      />
+                    ) : (
+                      <div className="h-56 grid place-items-center text-sm opacity-60">
+                        No image selected
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Budget + Status */}
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <label className="label">
+                      <span className="label-text">
+                        Suggested Fix Budget (BDT)
+                      </span>
+                    </label>
+                    <label className="input input-bordered flex items-center gap-2">
+                      <span className="opacity-70 text-lg">৳</span>
+                      <MdOutlinePayments className="text-base-content/60 text-lg" />
+                      <input
+                        type="number"
+                        min="1"
+                        className="grow"
+                        placeholder="e.g., 200"
+                        value={form.amount}
+                        onChange={onChange("amount")}
+                        required
+                      />
+                    </label>
+                  </div>
+
+                  <div>
+                    <label className="label">
+                      <span className="label-text">Status</span>
+                    </label>
+                    <select
+                      className="select select-bordered w-full"
+                      value={form.status}
+                      onChange={onChange("status")}
+                    >
+                      <option value="ongoing">ongoing</option>
+                      <option value="pending">pending</option>
+                      <option value="in-progress">in-progress</option>
+                      <option value="resolved">resolved</option>
+                    </select>
+                    <p className="mt-1 text-xs text-base-content/60">
+                      New reports default to <b>ongoing</b>.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="label">
+                      <span className="label-text">Your Email</span>
+                    </label>
+                    <input
+                      type="email"
+                      className="input input-bordered w-full"
+                      value={user?.email || ""}
+                      readOnly
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex flex-col sm:flex-row gap-3 sm:justify-end pt-2">
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  onClick={resetForm}
+                  disabled={submitting}
+                >
+                  Reset
+                </button>
+                <button
+                  type="submit"
+                  className={`btn bg-[#36B864] text-white border border-[#1a6a3d] hover:bg-[#2da258] ${
+                    submitting ? "btn-disabled" : ""
+                  }`}
+                  disabled={submitting}
+                >
+                  {submitting ? (
+                    <>
+                      <span className="loading loading-spinner"></span>
+                      Submitting…
+                    </>
+                  ) : (
+                    "Submit Issue"
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
 
-        {/* Status (default ongoing) */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Status</span>
-          </label>
-          <select
-            className="select select-bordered"
-            value={form.status}
-            onChange={onChange("status")}
-          >
-            <option value="ongoing">ongoing</option>
-            <option value="pending">pending</option>
-            <option value="in-progress">in-progress</option>
-            <option value="resolved">resolved</option>
-          </select>
-          <p className="mt-1 text-xs text-slate-500">
-            Default is <b>ongoing</b> when a user reports a new issue.
-          </p>
-        </div>
-
-        {/* Email (read-only) */}
-        <div className="form-control">
-          <label className="label">
-            <span className="label-text">Your Email</span>
-          </label>
-          <input
-            type="email"
-            className="input input-bordered"
-            value={user?.email || ""}
-            readOnly
-          />
-        </div>
-
-        {/* Date (display only) */}
-        <div className="text-sm text-slate-600">
-          <b>Date:</b> {todayDisplay}
-        </div>
-
-        {/* Submit */}
-        <div className="mt-4">
-          <button
-            type="submit"
-            className={`btn w-full bg-[#36B864] text-white border border-[#1a6a3d] hover:bg-[#2da258] ${
-              submitting ? "btn-disabled" : ""
-            }`}
-            disabled={submitting}
-          >
-            {submitting ? "Submitting…" : "Submit Issue"}
-          </button>
-        </div>
-      </form>
-    </div>
+        {/* tiny foot note */}
+        <p className="text-xs text-base-content/60 mt-3">
+          By submitting, you agree that your report may be shared with local
+          authorities for action and transparency.
+        </p>
+      </div>
+    </Container>
   );
 };
 

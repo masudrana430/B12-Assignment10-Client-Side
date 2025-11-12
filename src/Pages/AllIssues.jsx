@@ -3,6 +3,8 @@ import { useLoaderData } from "react-router";
 import { motion as Motion } from "framer-motion";
 import IssuesCard from "../Components/IssuesCard";
 import Container from "../Components/Container";
+import Lottie from "lottie-react";
+import Find from "./../animation/Not Found.json";
 
 const norm = (v) => (v ?? "").toString().trim().toLowerCase();
 
@@ -93,7 +95,7 @@ export default function AllIssues() {
 
   return (
     <Container>
-      <div>
+      <div className="mb-12 md:mb-16">
         <div className="text-2xl text-center font-bold">All Issues</div>
         <p className="text-center mb-6">Browse, filter, and search issues.</p>
 
@@ -205,13 +207,11 @@ export default function AllIssues() {
             ))}
           </Motion.div>
         ) : (
-          <Motion.div
-            className="text-center py-16 opacity-70"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            No issues match the selected filters or search.
-          </Motion.div>
+          <Lottie
+            animationData={Find}
+            loop={true}
+            style={{ width: "400px", height: "400px", margin: "0 auto" }}
+          />
         )}
       </div>
     </Container>

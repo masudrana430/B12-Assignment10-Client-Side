@@ -69,9 +69,7 @@ export default function Footer() {
                         <span className="text-base-content">Cleaning</span>
                       </h2>
                     </div>
-                    <div className="mt-1 text-sm md:text-base text-base-content/70 tracking-[.02em]">
-                      Community Cleanliness & Issue Reporting Portal
-                    </div>
+                    
                   </div>
                 </Link>
               </div>

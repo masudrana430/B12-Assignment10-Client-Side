@@ -49,12 +49,26 @@ export default function IssuesTableCard({ issue, onAskDelete }) {
         </div>
       </td>
 
-      <td><span className="badge badge-outline">{category || "—"}</span></td>
+      <td>
+        <span className="badge badge-outline">{category || "—"}</span>
+      </td>
       <td className="font-medium">{safeAmount(amount)}</td>
-      <td><span className={`badge ${statusBadgeClass(status)}`}>{status || "ongoing"}</span></td>
+      <td>
+        <span className={`badge ${statusBadgeClass(status)}`}>
+          {status || "ongoing"}
+        </span>
+      </td>
 
       <td className="flex items-center gap-2">
-        <Link to={`/update-issues/${idStr}`} state={{ issue }} className="btn btn-sm bg-[#36B864] text-white border border-[#1a6a3d] hover:bg-[#2da258]" disabled={pending}>
+        <Link
+          to={`/update-issues/${idStr}`}
+          state={{ issue }}
+          className="
+              btn btn-sm border border-[#1a6a3d]
+              bg-[#36B864] text-white hover:bg-[#2da258]
+            "
+          disabled={pending}
+        >
           Update
         </Link>
 

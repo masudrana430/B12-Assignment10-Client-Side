@@ -6,6 +6,8 @@ import router from './Routes/Routes';
 import AuthProvider from './Provider/AuthProvider';
 import "aos/dist/aos.css";
 import ThemeProvider from './Provider/ThemeProvider';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 

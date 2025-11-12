@@ -3,6 +3,14 @@ import { useNavigate, useNavigation, useParams } from "react-router-dom";
 import Container from "../Components/Container";
 import { AuthContext } from "../Provider/AuthProvider";
 import { toast } from "react-toastify";
+import {
+  MdLocationOn,
+  MdAttachMoney,
+  MdOutlineMail,
+  MdOutlineAccessTime,
+  MdOutlineCelebration,
+  MdOutlineVolunteerActivism,
+} from "react-icons/md";
 
 // use your deployed API base (or localhost while dev)
 const API = "https://b12-a10-copy-server.vercel.app";
@@ -56,9 +64,15 @@ export default function IssueDetails() {
     (async () => {
       try {
         const token =
-          user.getIdToken ? await user.getIdToken() : (user.accessToken || user?.stsTokenManager?.accessToken);
+          user.getIdToken
+            ? await user.getIdToken()
+            : user.accessToken || user?.stsTokenManager?.accessToken;
+
         const res = await fetch(`${API}/issues/${id}`, {
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token ?? ""}` },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token ?? ""}`,
+          },
           signal: controller.signal,
         });
 
@@ -88,9 +102,10 @@ export default function IssueDetails() {
     (async () => {
       try {
         setLoadingContribs(true);
-        const res = await fetch(`${API}/contributions?issueId=${encodeURIComponent(idStr)}`, {
-          signal: controller.signal,
-        });
+        const res = await fetch(
+          `${API}/contributions?issueId=${encodeURIComponent(idStr)}`,
+          { signal: controller.signal }
+        );
         if (!res.ok) throw new Error(`Failed to load contributions: ${res.status}`);
         const data = await res.json();
         setContributors(Array.isArray(data) ? data : []);
@@ -139,7 +154,11 @@ export default function IssueDetails() {
   } = issue;
 
   const formattedDate = date
-    ? new Date(date).toLocaleDateString("en-GB", { year: "numeric", month: "long", day: "numeric" })
+    ? new Date(date).toLocaleDateString("en-GB", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
     : "—";
 
   // progress
@@ -185,8 +204,8 @@ export default function IssueDetails() {
       phone: contrib.phone?.trim() || "",
       address: contrib.address?.trim() || "",
       note: contrib.note?.trim() || "",
-      date: new Date(),                // not an input; recorded now
-      avatar: user.photoURL || "",     // optional, for table row
+      date: new Date(), // not an input; recorded now
+      avatar: user.photoURL || "", // optional, for table row
     };
 
     try {
@@ -200,7 +219,9 @@ export default function IssueDetails() {
       toast.success("Thank you for your contribution!");
 
       // Refresh contributors list
-      const listRes = await fetch(`${API}/contributions?issueId=${encodeURIComponent(idStr)}`);
+      const listRes = await fetch(
+        `${API}/contributions?issueId=${encodeURIComponent(idStr)}`
+      );
       const list = (await listRes.json()) || [];
       setContributors(Array.isArray(list) ? list : []);
 
@@ -215,76 +236,146 @@ export default function IssueDetails() {
 
   return (
     <Container>
-      <div className="max-w-4xl mx-auto py-6">
+      <div className="max-w-5xl mx-auto py-6">
         <button className="btn btn-ghost mb-4" onClick={() => navigate(-1)}>
           ← Back
         </button>
 
-        <div className="card bg-base-100 shadow-xl">
-          {image ? (
-            <figure className="max-h-[420px] overflow-hidden">
-              <img src={image} alt={title} className="w-full h-full object-cover" loading="lazy" />
-            </figure>
-          ) : null}
+        {/* HERO */}
+        <div className="rounded-2xl overflow-hidden shadow-xl border bg-base-100">
+          <div className="relative">
+            <div className="aspect-[16/6] bg-base-200">
+              {image ? (
+                <img
+                  src={image}
+                  alt={title}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="w-full h-full grid place-items-center text-sm opacity-60">
+                  No image available
+                </div>
+              )}
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8 text-white">
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                <span className="badge badge-success">{category}</span>
+                <span className="badge badge-outline text-white border-white/40">
+                  <MdOutlineAccessTime className="text-lg" />
+                  <span className="ml-1">{formattedDate}</span>
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight drop-shadow">
+                {title}
+              </h1>
+              <div className="mt-3 flex flex-wrap gap-3 text-sm opacity-95">
+                <span className="inline-flex items-center gap-1">
+                  <MdLocationOn className="text-lg" /> {location}
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <MdOutlineMail className="text-lg" /> {email}
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <MdAttachMoney className="text-lg" /> Goal:{" "}
+                  <b>{currency(suggestedBudget || 0)}</b>
+                </span>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <button className="btn btn-primary" onClick={openContribution}>
+                  <MdOutlineVolunteerActivism className="text-xl" />
+                  Contribute
+                </button>
+                <button
+                  className="btn btn-outline"
+                  onClick={() => setOpenContrib(true)}
+                >
+                  Pay Clean-Up Contribution
+                </button>
+              </div>
+            </div>
+          </div>
 
-          <div className="card-body gap-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="badge badge-primary">{category}</span>
-              <span className="badge badge-ghost">{formattedDate}</span>
+          {/* BODY */}
+          <div className="p-5 sm:p-8">
+            {/* Stats Row */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="stat bg-base-200 rounded-xl">
+                <div className="stat-title">Collected</div>
+                <div className="stat-value text-[#36B864]">
+                  {currency(totalCollected)}
+                </div>
+              </div>
+              <div className="stat bg-base-200 rounded-xl">
+                <div className="stat-title">Goal</div>
+                <div className="stat-value">{currency(suggestedBudget || 0)}</div>
+              </div>
+              <div className="stat bg-base-200 rounded-xl">
+                <div className="stat-title">Progress</div>
+                <div className="stat-value">{pct}%</div>
+              </div>
+              <div className="stat bg-base-200 rounded-xl">
+                <div className="stat-title">Supporters</div>
+                <div className="stat-value flex items-center gap-2">
+                  {contributors.length}
+                  <MdOutlineCelebration className="text-2xl text-warning" />
+                </div>
+              </div>
             </div>
 
-            <h1 className="card-title text-2xl sm:text-3xl">{title}</h1>
+            {/* Progress Bar */}
+            <div className="mt-4">
+              <div className="flex items-center justify-between mb-1 text-sm opacity-80">
+                <span>Raised {currency(totalCollected)}</span>
+                <span>
+                  Target {currency(suggestedBudget || 0)} • {pct}%
+                </span>
+              </div>
+              <progress
+                className="progress progress-success w-full"
+                value={pct}
+                max="100"
+              />
+            </div>
 
-            <p className="text-base-content/80">{description}</p>
+            {/* Description */}
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-2">Issue Details</h3>
+              <p className="text-base-content/80 leading-relaxed">{description}</p>
+            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-              <div className="p-4 rounded-box bg-base-200">
+            {/* Info Boxes */}
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 rounded-xl bg-base-200">
                 <p className="text-xs uppercase text-base-content/60">Location</p>
                 <p className="font-medium">{location}</p>
               </div>
-              <div className="p-4 rounded-box bg-base-200">
-                <p className="text-xs uppercase text-base-content/60">Suggested Fix Budget</p>
-                <p className="font-semibold">{currency(suggestedBudget)}</p>
-              </div>
-              <div className="p-4 rounded-box bg-base-200">
-                <p className="text-xs uppercase text-base-content/60">Reporter</p>
-                <p className="font-medium">{email}</p>
-              </div>
-              <div className="p-4 rounded-box bg-base-200">
+              <div className="p-4 rounded-xl bg-base-200">
                 <p className="text-xs uppercase text-base-content/60">Issue ID</p>
                 <p className="font-mono text-sm break-all">{idStr}</p>
               </div>
-            </div>
-
-            {/* Progress */}
-            <div className="mt-4">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-medium">Collected: {currency(totalCollected)}</span>
-                <span className="text-sm opacity-70">
-                  Goal: {currency(suggestedBudget || 0)} • {pct}%
-                </span>
-              </div>
-              <progress className="progress progress-success w-full" value={pct} max="100" />
-            </div>
-
-            <div className="card-actions justify-between mt-4">
-              <button className="btn btn-outline" onClick={() => setOpenContrib(true)}>
-                Pay Clean-Up Contribution
-              </button>
-              <button className="btn btn-primary" onClick={openContribution}>
-                Contribute
-              </button>
             </div>
           </div>
         </div>
 
         {/* Contributors Table */}
-        <div className="mt-8">
-          <h3 className="text-xl font-semibold mb-3">Contributors</h3>
+        <div className="mt-10">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xl font-semibold">Contributors</h3>
+            {contributors.length > 0 && (
+              <span className="text-sm opacity-70">
+                {contributors.length} {contributors.length === 1 ? "person" : "people"} contributed
+              </span>
+            )}
+          </div>
+
           {loadingContribs ? (
-            <div className="py-6"><span className="loading loading-spinner" /></div>
+            <div className="py-6">
+              <span className="loading loading-spinner" />
+            </div>
           ) : contributors.length ? (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded-xl border bg-base-100">
               <table className="table">
                 <thead>
                   <tr>
@@ -313,13 +404,19 @@ export default function IssueDetails() {
                             </div>
                           </div>
                           <div>
-                            <div className="font-medium">{c.contributorName || "Anonymous"}</div>
+                            <div className="font-medium">
+                              {c.contributorName || "Anonymous"}
+                            </div>
                             <div className="text-sm opacity-70">{c.email}</div>
                           </div>
                         </div>
                       </td>
                       <td className="font-semibold">{currency(c.amount)}</td>
-                      <td className="max-w-[300px] truncate">{c.note || "—"}</td>
+                      <td className="max-w-[320px]">
+                        <span className="truncate inline-block align-middle">
+                          {c.note || "—"}
+                        </span>
+                      </td>
                       <td className="text-sm opacity-70">
                         {c.date ? new Date(c.date).toLocaleDateString() : "—"}
                       </td>
@@ -329,42 +426,53 @@ export default function IssueDetails() {
               </table>
             </div>
           ) : (
-            <p className="opacity-70">No contributions yet. Be the first to contribute!</p>
+            <div className="rounded-xl border bg-base-100 p-6 text-center opacity-80">
+              No contributions yet. Be the first to contribute!
+            </div>
           )}
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Contribution Modal */}
       {openContrib && (
         <div className="modal modal-open">
-          <div className="modal-box max-w-xl">
+          <div className="modal-box max-w-2xl">
             <h3 className="font-bold text-lg mb-4">Contribute to Clean-Up</h3>
 
-            <form onSubmit={submitContribution} className="space-y-3">
+            <form onSubmit={submitContribution} className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Issue Title (read only) */}
-              <div>
-                <label className="label"><span className="label-text">Issue Title</span></label>
+              <div className="md:col-span-2">
+                <label className="label">
+                  <span className="label-text">Issue Title</span>
+                </label>
                 <input className="input input-bordered w-full" value={title} readOnly />
               </div>
 
               {/* Amount */}
               <div>
-                <label className="label"><span className="label-text">Amount (BDT)</span></label>
-                <input
-                  type="number"
-                  min="1"
-                  name="amount"
-                  value={contrib.amount}
-                  onChange={onChange}
-                  className="input input-bordered w-full"
-                  placeholder="e.g., 200"
-                  required
-                />
+                <label className="label">
+                  <span className="label-text">Amount (BDT)</span>
+                </label>
+                <label className="input input-bordered flex items-center gap-2">
+                  <span className="opacity-60">৳</span>
+                  <input
+                    type="number"
+                    min="1"
+                    name="amount"
+                    value={contrib.amount}
+                    onChange={onChange}
+                    className="grow outline-none bg-transparent"
+                    placeholder="e.g., 200"
+                    required
+                  />
+                </label>
               </div>
 
               {/* Contributor Name */}
               <div>
-                <label className="label"><span className="label-text">Contributor Name</span></label>
+                <label className="label">
+                  <span className="label-text">Contributor Name</span>
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -376,15 +484,19 @@ export default function IssueDetails() {
                 />
               </div>
 
-              {/* Email (from user; read only) */}
+              {/* Email (read only) */}
               <div>
-                <label className="label"><span className="label-text">Email</span></label>
+                <label className="label">
+                  <span className="label-text">Email</span>
+                </label>
                 <input className="input input-bordered w-full" value={user?.email || ""} readOnly />
               </div>
 
               {/* Phone */}
               <div>
-                <label className="label"><span className="label-text">Phone Number</span></label>
+                <label className="label">
+                  <span className="label-text">Phone Number</span>
+                </label>
                 <input
                   type="tel"
                   name="phone"
@@ -396,8 +508,10 @@ export default function IssueDetails() {
               </div>
 
               {/* Address */}
-              <div>
-                <label className="label"><span className="label-text">Address</span></label>
+              <div className="md:col-span-2">
+                <label className="label">
+                  <span className="label-text">Address</span>
+                </label>
                 <input
                   type="text"
                   name="address"
@@ -409,13 +523,15 @@ export default function IssueDetails() {
               </div>
 
               {/* Date (display only) */}
-              <div className="text-sm text-base-content/70">
+              <div className="md:col-span-2 text-sm text-base-content/70">
                 <b>Date:</b> {new Date().toLocaleString()}
               </div>
 
               {/* Additional info */}
-              <div>
-                <label className="label"><span className="label-text">Additional info (optional)</span></label>
+              <div className="md:col-span-2">
+                <label className="label">
+                  <span className="label-text">Additional info (optional)</span>
+                </label>
                 <textarea
                   name="note"
                   value={contrib.note}
@@ -426,11 +542,20 @@ export default function IssueDetails() {
                 />
               </div>
 
-              <div className="modal-action">
-                <button type="button" className="btn btn-ghost" onClick={() => setOpenContrib(false)}>
+              <div className="md:col-span-2 modal-action">
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  onClick={() => setOpenContrib(false)}
+                  disabled={submitting}
+                >
                   Cancel
                 </button>
-                <button type="submit" className={`btn btn-primary ${submitting ? "btn-disabled" : ""}`} disabled={submitting}>
+                <button
+                  type="submit"
+                  className={`btn btn-primary ${submitting ? "btn-disabled" : ""}`}
+                  disabled={submitting}
+                >
                   {submitting ? "Submitting…" : "Submit Contribution"}
                 </button>
               </div>

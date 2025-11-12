@@ -29,7 +29,7 @@ export default function VolunteerCTA() {
   };
 
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-base-200 bg-gradient-to-br from-[#E8F7EE] to-[#F8F5FF] dark:from-base-200 dark:to-base-300">
+    <section className="relative overflow-hidden rounded-2xl border border-base-200 bg-gradient-to-br from-[#E8F7EE] to-[#F8F5FF] dark:from-base-200 dark:to-base-300 py-10 md:py-14 mb-12 md:mb-16">
       <div className="px-6 md:px-10 py-10 md:py-14 grid gap-8 md:grid-cols-2 items-center">
         {/* Left: copy */}
         <div>

@@ -216,9 +216,7 @@ const Navbar = () => {
                   <span className="text-base-content">Cleaning</span>
                 </h5>
               </div>
-              <div className="mt-1 text-sm md:text-base text-base-content/70 tracking-[.02em]">
-                Cleaning Services company
-              </div>
+              
             </div>
           </Link>
         </div>
