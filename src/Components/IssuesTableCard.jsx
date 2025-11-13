@@ -61,13 +61,17 @@ export default function IssuesTableCard({ issue, onAskDelete }) {
 
       <td className="flex items-center gap-2">
         <Link
-          to={`/update-issues/${idStr}`}
+          to={pending ? "#" : `/update-issues/${idStr}`}
           state={{ issue }}
-          className="
-              btn btn-sm border border-[#1a6a3d]
-              bg-[#36B864] text-white hover:bg-[#2da258]
-            "
-          disabled={pending}
+          className={`
+    btn btn-sm
+    border border-[#1a6a3d]
+    bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    text-white font-semibold
+    transition-colors duration-300
+    hover:from-[#48D978] hover:to-[#2B8C4A]
+    ${pending ? "pointer-events-none opacity-60" : ""}
+  `}
         >
           Update
         </Link>

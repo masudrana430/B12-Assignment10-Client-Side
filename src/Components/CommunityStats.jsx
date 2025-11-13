@@ -32,7 +32,9 @@ export default function CommunityStats({
   const resolved = Number(totals?.resolved ?? 0);
   const pending = Number(totals?.pending ?? 0);
   const issuesTotal = resolved + pending;
-  const resolutionRate = issuesTotal ? Math.round((resolved / issuesTotal) * 100) : 0;
+  const resolutionRate = issuesTotal
+    ? Math.round((resolved / issuesTotal) * 100)
+    : 0;
 
   const usersCount = useCountUp(users);
   const resolvedCount = useCountUp(resolved);
@@ -86,8 +88,20 @@ export default function CommunityStats({
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="mb-6 flex items-end justify-between gap-4">
             <div>
-              <h3 className="text-2xl font-extrabold tracking-tight">Community Stats</h3>
-              <p className="text-sm text-base-content/60">Updated {sinceText}</p>
+              <h3 className="text-2xl font-extrabold tracking-tight">
+                <span
+                  className="bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    bg-clip-text text-transparent
+    transition-colors duration-300
+    hover:from-[#48D978] hover:to-[#2B8C4A]"
+                >
+                  Community
+                </span>{" "}
+                Stats
+              </h3>
+              <p className="text-sm text-base-content/60">
+                Updated {sinceText}
+              </p>
             </div>
 
             {/* Resolution rate mini-card */}
@@ -99,13 +113,27 @@ export default function CommunityStats({
             >
               <div className="card-body py-3 px-4 gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="grid place-items-center h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-100 to-emerald-50 text-emerald-700 ring-1 ring-emerald-200/60">
+                  <span
+                    className="
+    grid place-items-center h-8 w-8 rounded-lg
+    bg-gradient-to-br from-[#E3F8EC] to-[#F5FFF9]
+    text-[#1A6A3D]
+    ring-1 ring-[#36B864]/40
+  "
+                  >
                     <FiTrendingUp className="h-4 w-4" />
                   </span>
+
                   <div className="text-sm font-medium">Resolution Rate</div>
-                  <div className="ml-auto text-sm font-semibold">{rateCount}%</div>
+                  <div className="ml-auto text-sm font-semibold">
+                    {rateCount}%
+                  </div>
                 </div>
-                <progress className="progress progress-success w-full" value={resolutionRate} max="100" />
+                <progress
+                  className="progress progress-success w-full"
+                  value={resolutionRate}
+                  max="100"
+                />
               </div>
             </Motion.div>
           </div>
@@ -117,7 +145,13 @@ export default function CommunityStats({
                 initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
-                transition={{ type: "spring", stiffness: 320, damping: 26, mass: 0.7, delay: idx * 0.05 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 320,
+                  damping: 26,
+                  mass: 0.7,
+                  delay: idx * 0.05,
+                }}
                 className="relative group"
               >
                 {/* Ambient accent */}
@@ -131,9 +165,13 @@ export default function CommunityStats({
                       <div className="text-3xl font-extrabold leading-none">
                         {Number.isFinite(c.raw) ? c.value : 0}
                       </div>
-                      <div className="text-sm text-base-content/70 truncate">{c.label}</div>
+                      <div className="text-sm text-base-content/70 truncate">
+                        {c.label}
+                      </div>
                     </div>
-                    <span className={`ml-auto badge badge-outline ${c.badge}`}>Live</span>
+                    <span className={`ml-auto badge badge-outline ${c.badge}`}>
+                      Live
+                    </span>
                   </div>
                 </div>
               </Motion.div>

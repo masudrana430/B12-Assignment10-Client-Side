@@ -12,6 +12,10 @@ import AddIssue from "./../animation/Add Document.json";
 import MYIssue from "./../animation/solving problems.json";
 import Donation from "./../animation/Donaciones.json";
 import Issues from "./../animation/Problem Solving Team..json";
+import Profile from "./../animation/Profile user card.json";
+import Logout from "./../animation/Animation - 1700989645104.json";
+import Login from "./../animation/Pin code Password Protection, Secure Login animation.json";
+import Register from "./../animation/register.json";
 
 // 🔹 default profile picture
 const DEFAULT_AVATAR_URL =
@@ -21,8 +25,8 @@ const navLinkClasses = ({ isActive }) =>
   [
     "inline-block text-[16px] font-semibold transition-colors",
     isActive
-      ? "bg-[#36B864] bg-clip-text text-transparent"
-      : "text-base-content hover:bg-gradient-to-r hover:from-[#632EE3] hover:to-[#F8721F] hover:bg-clip-text hover:text-transparent",
+      ? "bg-gradient-to-r from-[#36B864] to-[#1A6A3D] bg-clip-text text-transparent"
+      : "text-base-content hover:bg-gradient-to-r hover:from-[#48D978] hover:to-[#2B8C4A] hover:bg-clip-text hover:text-transparent",
   ].join(" ");
 
 // 🔹 if user has photoURL, use that; otherwise use your default image
@@ -179,27 +183,59 @@ const Navbar = () => {
               {!isAuthed ? (
                 <>
                   <li>
+                    <div className="flex items-center gap-1">
+                    <Lottie
+                    animationData={Login}
+                    loop
+                    className="h-9 w-9 shrink-0"
+                    style={{ margin: 0 }}
+                  />
                     <NavLink to="/auth/login" className={navLinkClasses}>
                       Login
                     </NavLink>
+                    </div>
                   </li>
                   <li>
+                    <div className="flex items-center gap-1">
+                    <Lottie
+                    animationData={Register}
+                    loop
+                    className="h-9 w-9 shrink-0"
+                    style={{ margin: 0 }}
+                  />
                     <NavLink to="/auth/register" className={navLinkClasses}>
                       Register
                     </NavLink>
+                    </div>
                   </li>
                 </>
               ) : (
                 <>
                   <li>
+                    <div className="flex items-center gap-1">
+                    <Lottie
+                    animationData={Profile}
+                    loop
+                    className="h-9 w-9 shrink-0"
+                    style={{ margin: 0 }}
+                  />
                     <NavLink to="/my-profile" className={navLinkClasses}>
                       My Profile
                     </NavLink>
+                    </div>
                   </li>
                   <li>
+                    <div className="flex items-center gap-1">
+                    <Lottie
+                    animationData={Logout}
+                    loop
+                    className="h-9 w-9 shrink-0"
+                    style={{ margin: 0 }}
+                  />
                     <button onClick={handleLogOut} className="text-left">
                       Logout
                     </button>
+                    </div>
                   </li>
                 </>
               )}
@@ -220,7 +256,9 @@ const Navbar = () => {
             <div className="leading-none select-none">
               <div className="text-[1rem] md:text-[1.5rem] font-extrabold tracking-tight">
                 <h5>
-                  <span className="text-[#36B864]">Pro</span>{" "}
+                  <span className="bg-gradient-to-r from-[#36B864] to-[#1A6A3D] bg-clip-text text-transparent">
+                    Pro
+                  </span>{" "}
                   <span className="text-base-content">Cleaning</span>
                 </h5>
               </div>
@@ -276,10 +314,26 @@ const Navbar = () => {
                   </span>
                 </li>
                 <li>
+                  <div className="flex items-center gap-1">
+                  <Lottie
+                    animationData={Profile}
+                    loop
+                    className="h-9 w-9 shrink-0"
+                    style={{ margin: 0 }}
+                  />
                   <Link to="/my-profile">My Profile</Link>
+                  </div>
                 </li>
                 <li>
+                  <div className="flex items-center gap-1">
+                  <Lottie
+                    animationData={Logout}
+                    loop
+                    className="h-9 w-9 shrink-0"
+                    style={{ margin: 0 }}
+                  />
                   <button onClick={handleLogOut}>Logout</button>
+                  </div>
                 </li>
               </ul>
             </div>

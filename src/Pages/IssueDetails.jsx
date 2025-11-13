@@ -64,10 +64,9 @@ export default function IssueDetails() {
 
     (async () => {
       try {
-        const token =
-          user.getIdToken
-            ? await user.getIdToken()
-            : user.accessToken || user?.stsTokenManager?.accessToken;
+        const token = user.getIdToken
+          ? await user.getIdToken()
+          : user.accessToken || user?.stsTokenManager?.accessToken;
 
         const res = await fetch(`${API}/issues/${id}`, {
           headers: {
@@ -107,7 +106,8 @@ export default function IssueDetails() {
           `${API}/contributions?issueId=${encodeURIComponent(idStr)}`,
           { signal: controller.signal }
         );
-        if (!res.ok) throw new Error(`Failed to load contributions: ${res.status}`);
+        if (!res.ok)
+          throw new Error(`Failed to load contributions: ${res.status}`);
         const data = await res.json();
         setContributors(Array.isArray(data) ? data : []);
       } catch (e) {
@@ -161,9 +161,14 @@ export default function IssueDetails() {
     : "—";
 
   // progress
-  const totalCollected = contributors.reduce((s, c) => s + (Number(c.amount) || 0), 0);
+  const totalCollected = contributors.reduce(
+    (s, c) => s + (Number(c.amount) || 0),
+    0
+  );
   const goal = Number(suggestedBudget) || 0;
-  const pct = goal ? Math.min(100, Math.round((totalCollected / goal) * 100)) : 0;
+  const pct = goal
+    ? Math.min(100, Math.round((totalCollected / goal) * 100))
+    : 0;
 
   // ----- Open modal prefilled
   const openContribution = () => {
@@ -192,7 +197,8 @@ export default function IssueDetails() {
       return;
     }
     const amt = Number(contrib.amount);
-    if (!amt || amt <= 0) return toast.warn("Please enter a valid amount (BDT)");
+    if (!amt || amt <= 0)
+      return toast.warn("Please enter a valid amount (BDT)");
 
     const payload = {
       issueId: idStr,
@@ -282,7 +288,11 @@ export default function IssueDetails() {
                 </span>
               </div>
               <div className="mt-4 flex flex-wrap gap-3">
-                <button className="btn btn-primary" onClick={openContribution}>
+                <button className="btn btn-sm border border-[#1a6a3d]
+    bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    text-white font-semibold
+    transition-colors duration-300
+    hover:from-[#48D978] hover:to-[#2B8C4A]" onClick={openContribution}>
                   <MdOutlineVolunteerActivism className="text-xl" />
                   Contribute
                 </button>
@@ -302,13 +312,21 @@ export default function IssueDetails() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="stat bg-base-200 rounded-xl">
                 <div className="stat-title">Collected</div>
-                <div className="stat-value text-[#36B864]">
+                <div
+                  className="
+    stat-value
+    bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    bg-clip-text text-transparent
+  "
+                >
                   {currency(totalCollected)}
                 </div>
               </div>
               <div className="stat bg-base-200 rounded-xl">
                 <div className="stat-title">Goal</div>
-                <div className="stat-value">{currency(suggestedBudget || 0)}</div>
+                <div className="stat-value">
+                  {currency(suggestedBudget || 0)}
+                </div>
               </div>
               <div className="stat bg-base-200 rounded-xl">
                 <div className="stat-title">Progress</div>
@@ -341,17 +359,23 @@ export default function IssueDetails() {
             {/* Description */}
             <div className="mt-6">
               <h3 className="text-lg font-semibold mb-2">Issue Details</h3>
-              <p className="text-base-content/80 leading-relaxed">{description}</p>
+              <p className="text-base-content/80 leading-relaxed">
+                {description}
+              </p>
             </div>
 
             {/* Info Boxes */}
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="p-4 rounded-xl bg-base-200">
-                <p className="text-xs uppercase text-base-content/60">Location</p>
+                <p className="text-xs uppercase text-base-content/60">
+                  Location
+                </p>
                 <p className="font-medium">{location}</p>
               </div>
               <div className="p-4 rounded-xl bg-base-200">
-                <p className="text-xs uppercase text-base-content/60">Issue ID</p>
+                <p className="text-xs uppercase text-base-content/60">
+                  Issue ID
+                </p>
                 <p className="font-mono text-sm break-all">{idStr}</p>
               </div>
             </div>
@@ -364,7 +388,8 @@ export default function IssueDetails() {
             <h3 className="text-xl font-semibold">Contributors</h3>
             {contributors.length > 0 && (
               <span className="text-sm opacity-70">
-                {contributors.length} {contributors.length === 1 ? "person" : "people"} contributed
+                {contributors.length}{" "}
+                {contributors.length === 1 ? "person" : "people"} contributed
               </span>
             )}
           </div>
@@ -438,13 +463,20 @@ export default function IssueDetails() {
           <div className="modal-box max-w-2xl">
             <h3 className="font-bold text-lg mb-4">Contribute to Clean-Up</h3>
 
-            <form onSubmit={submitContribution} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form
+              onSubmit={submitContribution}
+              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
               {/* Issue Title (read only) */}
               <div className="md:col-span-2">
                 <label className="label">
                   <span className="label-text">Issue Title</span>
                 </label>
-                <input className="input input-bordered w-full" value={title} readOnly />
+                <input
+                  className="input input-bordered w-full"
+                  value={title}
+                  readOnly
+                />
               </div>
 
               {/* Amount */}
@@ -488,7 +520,11 @@ export default function IssueDetails() {
                 <label className="label">
                   <span className="label-text">Email</span>
                 </label>
-                <input className="input input-bordered w-full" value={user?.email || ""} readOnly />
+                <input
+                  className="input input-bordered w-full"
+                  value={user?.email || ""}
+                  readOnly
+                />
               </div>
 
               {/* Phone */}
@@ -552,7 +588,9 @@ export default function IssueDetails() {
                 </button>
                 <button
                   type="submit"
-                  className={`btn btn-primary ${submitting ? "btn-disabled" : ""}`}
+                  className={`btn btn-primary ${
+                    submitting ? "btn-disabled" : ""
+                  }`}
                   disabled={submitting}
                 >
                   {submitting ? "Submitting…" : "Submit Contribution"}
@@ -560,7 +598,10 @@ export default function IssueDetails() {
               </div>
             </form>
           </div>
-          <div className="modal-backdrop" onClick={() => setOpenContrib(false)} />
+          <div
+            className="modal-backdrop"
+            onClick={() => setOpenContrib(false)}
+          />
         </div>
       )}
     </Container>

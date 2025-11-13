@@ -126,9 +126,12 @@ const IssuesCard = ({ issue }) => {
           <Link
             to={`/issues-details/${idStr}`}
             className="
-              btn btn-sm border border-[#1a6a3d]
-              bg-[#36B864] text-white hover:bg-[#2da258]
-            "
+    btn btn-sm border border-[#1a6a3d]
+    bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    text-white font-semibold
+    transition-colors duration-300
+    hover:from-[#48D978] hover:to-[#2B8C4A]
+  "
           >
             See Details
           </Link>

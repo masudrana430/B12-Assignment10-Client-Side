@@ -148,7 +148,13 @@ const WinterHeroSwiper = ({ slides = [] }) => {
                       >
                         <Link
                           to={s.to || "/"}
-                          className="btn border-0 rounded-full bg-[#36B864] hover:bg-[#2c8a4b] text-slate-900 font-semibold"
+                          className="
+    btn border-0 rounded-full
+    bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    text-white font-semibold
+    transition-colors duration-300
+    hover:from-[#48D978] hover:to-[#2B8C4A]
+  "
                         >
                           {s.cta || "Explore"}
                         </Link>
@@ -163,7 +169,11 @@ const WinterHeroSwiper = ({ slides = [] }) => {
                     initial="hidden"
                     animate={isActive ? "show" : "hidden"}
                   >
-                    <div className="absolute inset-4 rounded-[28px] bg-[#36B864] shadow-lg overflow-hidden">
+                    <div
+                      className="absolute inset-4 rounded-[28px]
+    bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    shadow-lg overflow-hidden"
+                    >
                       {s.img ? (
                         <Motion.img
                           src={s.img}
@@ -188,27 +198,19 @@ const WinterHeroSwiper = ({ slides = [] }) => {
                       <Lottie
                         animationData={Camera}
                         loop={true}
-                        
-                        className="absolute top-0 right-1 w-30 h-30 object-contain drop-shadow pointer-events-none select-none"
+                        className="absolute top-0 right-1 w-20 h-20 object-contain drop-shadow pointer-events-none select-none"
                       />
-                      
-
-                      
 
                       <Lottie
                         animationData={Earth}
                         loop={true}
-                        
-                        className="absolute left-0 top-1/4 -translate-y-1/2 w-30 h-30 object-contain drop-shadow pointer-events-none select-none"
+                        className="absolute left-0 top-1/4 -translate-y-1/2 w-20 h-20 object-contain drop-shadow pointer-events-none select-none"
                       />
                       <Lottie
                         animationData={Report}
                         loop={true}
-                        
                         className="absolute right-4 sm:right-0 bottom-10 w-20 h-20 object-contain drop-shadow pointer-events-none select-none"
                       />
-
-                      
 
                       {/* snow overlay (kept as CSS animation for perf) */}
                       <div className="pointer-events-none absolute inset-0 overflow-hidden">

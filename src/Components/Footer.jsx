@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import logo from "../assets/Vector.png";
 import petImg1 from "../assets/Untitled__2_-removebg-preview.png";
 import petImg2 from "../assets/Untitled__3_-removebg-preview.png";
-import { MdOutlineMail, MdOutlinePhone, MdOutlineLocationOn } from "react-icons/md";
+import {
+  MdOutlineMail,
+  MdOutlinePhone,
+  MdOutlineLocationOn,
+} from "react-icons/md";
 import { FaXTwitter } from "react-icons/fa6"; // ✅ X (Twitter) icon
 
 function GooglePlayIcon(props) {
@@ -61,30 +65,38 @@ export default function Footer() {
                   className="flex items-center gap-3 sm:gap-4 normal-case"
                   aria-label="Portal Home"
                 >
-                  <img src={logo} alt="Portal logo" className="h-10 w-auto md:h-12" />
+                  <img
+                    src={logo}
+                    alt="Portal logo"
+                    className="h-10 w-auto md:h-12"
+                  />
                   <div className="leading-none select-none">
                     <div className="text-[1.75rem] md:text-[2rem] font-extrabold tracking-tight">
                       <h2>
-                        <span className="text-[#36B864]">Pro</span>{" "}
+                        <span className="bg-gradient-to-r from-[#36B864] to-[#1A6A3D] bg-clip-text text-transparent">
+                          Pro
+                        </span>{" "}
                         <span className="text-base-content">Cleaning</span>
                       </h2>
                     </div>
-                    
                   </div>
                 </Link>
               </div>
             </div>
 
             <p className="mt-4 text-sm leading-6 text-[#3b3b3b] max-w-md">
-              Help keep our neighborhoods safe and clean. Report problems like garbage
-              overflow, broken footpaths, illegal dumping, and waterlogging; track
-              progress; and join local cleanup efforts.
+              Help keep our neighborhoods safe and clean. Report problems like
+              garbage overflow, broken footpaths, illegal dumping, and
+              waterlogging; track progress; and join local cleanup efforts.
             </p>
 
             <ul className="mt-5 space-y-2 text-sm">
               <li className="flex items-start gap-2">
                 <MdOutlineMail className="mt-0.5" />
-                <a href="mailto:support@cleancity.example" className="link link-hover">
+                <a
+                  href="mailto:support@cleancity.example"
+                  className="link link-hover"
+                >
                   support@cleancity.example
                 </a>
               </li>
@@ -153,7 +165,9 @@ export default function Footer() {
 
           {/* Programs */}
           <div>
-            <h4 className="font-bold text-[#2E2A1E] mb-3">Community Programs</h4>
+            <h4 className="font-bold text-[#2E2A1E] mb-3">
+              Community Programs
+            </h4>
             <ul className="space-y-2 text-sm">
               {programs.map((i) => (
                 <li key={i.label}>
@@ -170,7 +184,11 @@ export default function Footer() {
         <div className="mt-8">
           <div className="flex items-end justify-between gap-4">
             <div className="h-24 md:h-28">
-              <img src={petImg1} alt="illustration" className="h-full object-contain" />
+              <img
+                src={petImg1}
+                alt="illustration"
+                className="h-full object-contain"
+              />
             </div>
 
             {/* Newsletter */}
@@ -187,7 +205,9 @@ export default function Footer() {
                     className="mt-3 md:mt-0 flex w-full md:w-auto"
                     onSubmit={(e) => {
                       e.preventDefault();
-                      alert("Thanks for subscribing! (connect to your backend)");
+                      alert(
+                        "Thanks for subscribing! (connect to your backend)"
+                      );
                     }}
                   >
                     <input
@@ -198,7 +218,13 @@ export default function Footer() {
                     />
                     <button
                       type="submit"
-                      className="btn rounded-l-none bg-[#F8D548] hover:bg-[#e9c635] border-0"
+                      className="
+    btn rounded-l-none border-0
+    bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    text-white font-semibold
+    transition-colors duration-300
+    hover:from-[#48D978] hover:to-[#2B8C4A]
+  "
                     >
                       Subscribe
                     </button>
@@ -208,23 +234,35 @@ export default function Footer() {
             </div>
 
             <div className="h-24 md:h-28">
-              <img src={petImg2} alt="illustration" className="h-full object-contain" />
+              <img
+                src={petImg2}
+                alt="illustration"
+                className="h-full object-contain"
+              />
             </div>
           </div>
         </div>
       </div>
 
       {/* Bottom bar */}
-      <div className="bg-[#3B2417] text-[#fff]">
+      <div
+        className="
+    text-[#fff]
+    bg-gradient-to-b from-[#3B2417] to-[#120A06]
+  "
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm">
-            © {new Date().getFullYear()} <span className="font-semibold">ProCleaning</span>.
-            Built for communities — all rights reserved.
+            © {new Date().getFullYear()}{" "}
+            <span className="font-semibold">ProCleaning</span>. Built for
+            communities — all rights reserved.
           </p>
 
           <div className="flex items-center gap-3">
             <span className="text-sm opacity-80">Stay connected</span>
-            <span className="px-2 py-1 rounded bg-white/10 text-xs">Facebook</span>
+            <span className="px-2 py-1 rounded bg-white/10 text-xs">
+              Facebook
+            </span>
 
             {/* ✅ Replaced Twitter badge with X icon + link */}
             <a
@@ -239,7 +277,9 @@ export default function Footer() {
               <span className="sr-only">X</span>
             </a>
 
-            <span className="px-2 py-1 rounded bg-white/10 text-xs">Email Updates</span>
+            <span className="px-2 py-1 rounded bg-white/10 text-xs">
+              Email Updates
+            </span>
             <span className="px-2 py-1 rounded bg-white/10 text-xs">RSS</span>
           </div>
         </div>

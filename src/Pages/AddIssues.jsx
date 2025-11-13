@@ -9,6 +9,7 @@ import {
   MdOutlineImage,
   MdOutlinePayments,
 } from "react-icons/md";
+import LoadingSpinnercopy from "../Components/LoadingSpinnercopy";
 
 const API_BASE =
   import.meta.env.VITE_API_BASE || "https://b12-a10-copy-server.vercel.app";
@@ -57,7 +58,8 @@ const AddIssues = () => {
     // Basic validation
     if (!form.title?.trim()) return toast.warn("Please enter issue title");
     if (!form.location?.trim()) return toast.warn("Please enter location");
-    if (!form.description?.trim()) return toast.warn("Please enter description");
+    if (!form.description?.trim())
+      return toast.warn("Please enter description");
     const amountNum = Number(form.amount);
     if (!amountNum || amountNum <= 0)
       return toast.warn("Please enter a valid budget amount (BDT)");
@@ -101,7 +103,13 @@ const AddIssues = () => {
     <Container>
       <div className="max-w-5xl mx-auto py-8">
         {/* Header panel */}
-        <div className="rounded-2xl bg-gradient-to-r from-[#36B864] to-[#2da258] text-white p-6 shadow-md">
+        <div
+          className="
+    rounded-2xl
+    bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    text-white p-6 shadow-md
+  "
+        >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h2 className="text-2xl md:text-3xl font-extrabold">
@@ -319,14 +327,20 @@ const AddIssues = () => {
                 </button>
                 <button
                   type="submit"
-                  className={`btn bg-[#36B864] text-white border border-[#1a6a3d] hover:bg-[#2da258] ${
-                    submitting ? "btn-disabled" : ""
-                  }`}
+                  className={`
+    btn
+    text-white
+    border border-[#1a6a3d]
+    bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    hover:from-[#48D978] hover:to-[#2B8C4A]
+    transition-colors duration-300
+    ${submitting ? "btn-disabled" : ""}
+  `}
                   disabled={submitting}
                 >
                   {submitting ? (
                     <>
-                      <span className="loading loading-spinner"></span>
+                      <LoadingSpinnercopy className="h-2 w-2 mr-2 border-white" />
                       Submitting…
                     </>
                   ) : (
