@@ -45,7 +45,9 @@ Hero Swiper
 ## Tech Stack
 
 - **Frontend:** React, Vite, React Router
-- **Styling:** Tailwind CSS, DaisyUI, Lottie animations
+- **Styling:** Tailwind CSS, DaisyUI, Lottie animations ,React-simple-typewriter
+React Awesome reveal 
+
 - **Auth:** Firebase Authentication
 - **Backend API:** Node.js, Express, MongoDB (separate server)
 - **PDF Generation:** jsPDF, jsPDF-autotable
