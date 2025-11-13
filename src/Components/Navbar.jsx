@@ -13,6 +13,9 @@ import MYIssue from "./../animation/solving problems.json";
 import Donation from "./../animation/Donaciones.json";
 import Issues from "./../animation/Problem Solving Team..json";
 
+// 🔹 default profile picture
+const DEFAULT_AVATAR_URL =
+  "https://cdn-icons-png.freepik.com/512/6596/6596121.png";
 
 const navLinkClasses = ({ isActive }) =>
   [
@@ -22,10 +25,10 @@ const navLinkClasses = ({ isActive }) =>
       : "text-base-content hover:bg-gradient-to-r hover:from-[#632EE3] hover:to-[#F8721F] hover:bg-clip-text hover:text-transparent",
   ].join(" ");
 
+// 🔹 if user has photoURL, use that; otherwise use your default image
 const getAvatarUrl = (user) => {
   if (user?.photoURL) return user.photoURL;
-  const seed = user?.email || user?.displayName || user?.uid || "guest";
-  return `https://i.pravatar.cc/80?u=${encodeURIComponent(seed)}`;
+  return DEFAULT_AVATAR_URL;
 };
 
 const Navbar = () => {
@@ -131,9 +134,14 @@ const Navbar = () => {
       ];
 
   const renderLinks = () =>
-    links.map(({ to, label, end , emoji }) => (
+    links.map(({ to, label, end, emoji }) => (
       <li key={to}>
-        <NavLink to={to} end={end} className={navLinkClasses} style={{display: 'flex', alignItems: 'center', gap: '2px'}}>
+        <NavLink
+          to={to}
+          end={end}
+          className={navLinkClasses}
+          style={{ display: "flex", alignItems: "center", gap: "2px" }}
+        >
           {emoji}
           {label}
         </NavLink>
@@ -216,7 +224,6 @@ const Navbar = () => {
                   <span className="text-base-content">Cleaning</span>
                 </h5>
               </div>
-              
             </div>
           </Link>
         </div>
@@ -228,7 +235,6 @@ const Navbar = () => {
 
         {/* Right */}
         <div className="navbar-end gap-3">
-          {/* Theme toggle */}
           <ThemeToggle />
 
           {!isAuthed ? (
@@ -244,7 +250,6 @@ const Navbar = () => {
               </NavLink>
             </>
           ) : (
-            // Avatar dropdown (Logout inside)
             <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full border border-base-300 overflow-hidden">
@@ -254,15 +259,9 @@ const Navbar = () => {
                     referrerPolicy="no-referrer"
                     loading="lazy"
                     onError={(e) => {
+                      // 🔹 if anything fails, always fall back to your default avatar
                       e.currentTarget.onerror = null;
-                      const name = (
-                        user?.displayName ||
-                        user?.email ||
-                        "Guest"
-                      ).split("@")[0];
-                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                        name
-                      )}&background=36B864&color=ffffff&size=80&bold=true`;
+                      e.currentTarget.src = DEFAULT_AVATAR_URL;
                     }}
                   />
                 </div>

@@ -207,11 +207,15 @@ export default function AllIssues() {
             ))}
           </Motion.div>
         ) : (
+          <div className="mt-12">
           <Lottie
             animationData={Find}
             loop={true}
             style={{ width: "400px", height: "400px", margin: "0 auto" }}
           />
+          <p className="text-center text-lg mt-4">No issues found.</p>
+        </div>
+          
         )}
       </div>
     </Container>

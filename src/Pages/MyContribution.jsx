@@ -1,10 +1,15 @@
+// src/Pages/MyContribution.jsx
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import Container from "../Components/Container";
 import { AuthContext } from "../Provider/AuthProvider";
 import { toast } from "react-toastify";
 import LoadingSpinnercopy from "../Components/LoadingSpinnercopy";
 
-const API = import.meta.env.VITE_API_BASE || "https://b12-a10-copy-server.vercel.app";
+import Lottie from "lottie-react";
+import NoData from "./../animation/no data found.json";
+
+const API =
+  import.meta.env.VITE_API_BASE || "https://b12-a10-copy-server.vercel.app";
 
 const currency = (n) => {
   const v = Number(n) || 0;
@@ -25,36 +30,46 @@ export default function MyContribution() {
   const [loading, setLoading] = useState(true);
   const [downloading, setDownloading] = useState(false);
 
-  // Load current user's contributions (server already filters by token)
+  // Load current user's contributions
   useEffect(() => {
     if (!user) return;
     const controller = new AbortController();
 
     (async () => {
       try {
-        const token =
-          user.getIdToken ? await user.getIdToken() : (user.accessToken || user?.stsTokenManager?.accessToken);
+        const token = user.getIdToken
+          ? await user.getIdToken()
+          : user.accessToken || user?.stsTokenManager?.accessToken;
 
-        const res = await fetch(`${API}/my-contribution`, {
-          headers: { Authorization: `Bearer ${token ?? ""}` },
-          signal: controller.signal,
-        });
+        const email = user.email;
+
+        const res = await fetch(
+          `${API}/my-contribution?email=${encodeURIComponent(email)}`,
+          {
+            headers: { Authorization: `Bearer ${token ?? ""}` },
+            signal: controller.signal,
+          }
+        );
+
         if (res.status === 401 || res.status === 403) {
           toast.info("Please log in again");
           return;
         }
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
         const data = await res.json();
 
-        // Normalize a few possible shapes (old/new payloads)
         const normalized = (Array.isArray(data) ? data : []).map((d) => {
-          const id = typeof d._id === "string" ? d._id : d._id?.$oid ?? d._id?.toString?.() ?? "";
+          const id =
+            typeof d._id === "string"
+              ? d._id
+              : d._id?.$oid ?? d._id?.toString?.() ?? "";
+
           const title = d.issueTitle || d.title || "Untitled Issue";
           const category = d.category || "—";
-          // In the newer flow, "amount" is the contributed amount.
-          // In older flow, if amount was the issue budget, you can rename on the server later.
           const paid = Number(d.amount) || 0;
           const when = d.date || d.createdAt || Date.now();
+
           return { ...d, _id: id, title, category, paid, when };
         });
 
@@ -92,23 +107,22 @@ export default function MyContribution() {
   const downloadReceipt = async (row) => {
     try {
       setDownloading(true);
-      const [{ default: jsPDF }, _] = await Promise.all([
-        import("jspdf"),
-        import("jspdf-autotable"),
-      ]);
+
+      const jsPDFModule = await import("jspdf");
+      const jsPDF = jsPDFModule.default;
 
       const doc = new jsPDF();
 
-      // Header
       doc.setFontSize(16);
       doc.text("Clean-Up Contribution Receipt", 14, 16);
       doc.setFontSize(10);
       doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 22);
 
-      // Payer / meta
       const email = user?.email || "—";
       const lines = [
-        `Contributor: ${row.contributorName || user?.displayName || "Anonymous"}`,
+        `Contributor: ${
+          row.contributorName || user?.displayName || "Anonymous"
+        }`,
         `Email: ${email}`,
         `Issue: ${row.title}`,
         `Category: ${row.category}`,
@@ -122,7 +136,6 @@ export default function MyContribution() {
         y += 6;
       });
 
-      // Footer
       y += 6;
       doc.setFontSize(9);
       doc.text("Thank you for helping keep our community clean!", 14, y);
@@ -130,7 +143,7 @@ export default function MyContribution() {
       const safeEmail = (email || "user").replace(/[^a-zA-Z0-9_-]/g, "_");
       doc.save(`receipt_${safeEmail}_${row._id}.pdf`);
     } catch (e) {
-      console.error(e);
+      console.error("Receipt PDF error:", e);
       toast.error("Failed to create receipt PDF.");
     } finally {
       setDownloading(false);
@@ -142,10 +155,13 @@ export default function MyContribution() {
     if (!rows.length) return toast.info("No contributions to export.");
     try {
       setDownloading(true);
-      const [{ default: jsPDF }, _] = await Promise.all([
-        import("jspdf"),
-        import("jspdf-autotable"),
-      ]);
+
+      const jsPDFModule = await import("jspdf");
+      const autoTableModule = await import("jspdf-autotable");
+
+      const jsPDF = jsPDFModule.default;
+      const autoTable = autoTableModule.default || autoTableModule.autoTable; // support both styles
+
       const doc = new jsPDF();
 
       doc.setFontSize(16);
@@ -153,7 +169,11 @@ export default function MyContribution() {
       doc.setFontSize(10);
       doc.text(`User: ${user?.email || "—"}`, 14, 22);
       doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 28);
-      doc.text(`Total Paid: ${currency(totalPaid)} | Records: ${rows.length}`, 14, 34);
+      doc.text(
+        `Total Paid: ${currency(totalPaid)} | Records: ${rows.length}`,
+        14,
+        34
+      );
 
       const body = rows.map((r, idx) => [
         idx + 1,
@@ -163,8 +183,8 @@ export default function MyContribution() {
         fmtDate(r.when),
       ]);
 
-      // @ts-ignore (autotable is attached to doc by side-effect)
-      doc.autoTable({
+      // ✅ use autoTable(doc, options) instead of doc.autoTable(...)
+      autoTable(doc, {
         head: [["#", "Issue Title", "Category", "Paid Amount", "Date"]],
         body,
         startY: 40,
@@ -175,7 +195,7 @@ export default function MyContribution() {
       const safeEmail = (user?.email || "user").replace(/[^a-zA-Z0-9_-]/g, "_");
       doc.save(`my_contributions_${safeEmail}.pdf`);
     } catch (e) {
-      console.error(e);
+      console.error("Download all PDF error:", e);
       toast.error("Failed to export PDF.");
     } finally {
       setDownloading(false);
@@ -197,7 +217,8 @@ export default function MyContribution() {
           <div>
             <h2 className="text-2xl font-bold">My Contributions</h2>
             <p className="text-sm opacity-70">
-              Total paid: <span className="font-semibold">{currency(totalPaid)}</span>
+              Total paid:{" "}
+              <span className="font-semibold">{currency(totalPaid)}</span>
             </p>
           </div>
           <button
@@ -245,8 +266,19 @@ export default function MyContribution() {
             </table>
           </div>
         ) : (
-          <div className="py-10 text-center opacity-70">
-            You haven’t made any contributions yet.
+          <div className="mt-12">
+            <Lottie
+              animationData={NoData}
+              loop={true}
+              style={{
+                width: "400px",
+                height: "400px",
+                margin: "0 auto",
+              }}
+            />
+            <p className="text-center text-lg mt-4">
+              You haven’t made any contributions yet.
+            </p>
           </div>
         )}
       </div>

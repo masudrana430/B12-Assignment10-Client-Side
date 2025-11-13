@@ -228,7 +228,7 @@ export default function IssueDetails() {
       setOpenContrib(false);
     } catch (e) {
       console.error(e);
-      toast.error("Failed to contribute. Please try again.");
+      // toast.error("Failed to contribute. Please try again.");
     } finally {
       setSubmitting(false);
     }

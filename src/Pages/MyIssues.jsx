@@ -7,6 +7,9 @@ import DeleteIssueModal from "./DeleteIssueModal";
 // import LoadingSpinner from "../Components/LoadingSpinner";
 import LoadingSpinnercopy from "../Components/LoadingSpinnercopy";
 
+import Lottie from "lottie-react";
+import NoData from "./../animation/No-Data.json";
+
 const MyIssues = () => {
   const { user } = use(AuthContext);
   const [issues, setIssues] = useState([]);
@@ -36,7 +39,15 @@ const MyIssues = () => {
   }, []);
 
   if (loading) {
-    return <div> <Container> <LoadingSpinnercopy /></Container></div>;
+    return (
+      <div>
+        {" "}
+        <Container>
+          {" "}
+          <LoadingSpinnercopy />
+        </Container>
+      </div>
+    );
   }
   return (
     <Container>
@@ -74,7 +85,20 @@ const MyIssues = () => {
               ) : (
                 <tr>
                   <td colSpan={5} className="text-center opacity-70 py-10">
-                    You haven’t submitted any issues yet.
+                    <div className="mt-12">
+                      <Lottie
+                        animationData={NoData}
+                        loop={true}
+                        style={{
+                          width: "400px",
+                          height: "400px",
+                          margin: "0 auto",
+                        }}
+                      />
+                      <p className="text-center text-lg mt-4">
+                        No issues found.
+                      </p>
+                    </div>
                   </td>
                 </tr>
               )}
