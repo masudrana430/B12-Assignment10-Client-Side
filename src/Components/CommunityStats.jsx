@@ -140,10 +140,10 @@ export default function CommunityStats({
             ))}
           </div>
 
-          {/* Footer hint */}
+          {/* Footer hint
           <div className="mt-4 text-xs text-base-content/60">
             * Resolution rate = Resolved ÷ (Resolved + Pending)
-          </div>
+          </div> */}
         </div>
       </section>
     </Container>

@@ -51,7 +51,7 @@ const Navbar = () => {
             <Lottie
               animationData={Home}
               loop
-              className="h-12 w-12 shrink-0"
+              className="h-10 w-10 shrink-0"
               style={{ margin: 0 }}
             />
           ),
@@ -63,7 +63,7 @@ const Navbar = () => {
             <Lottie
               animationData={Issue}
               loop
-              className="h-12 w-12 shrink-0"
+              className="h-10 w-10 shrink-0"
               style={{ margin: 0 }}
             />
           ),
@@ -75,7 +75,7 @@ const Navbar = () => {
             <Lottie
               animationData={AddIssue}
               loop
-              className="h-12 w-12 shrink-0"
+              className="h-10 w-10 shrink-0"
               style={{ margin: 0 }}
             />
           ),
@@ -87,7 +87,7 @@ const Navbar = () => {
             <Lottie
               animationData={MYIssue}
               loop
-              className="h-12 w-12 shrink-0"
+              className="h-10 w-10 shrink-0"
               style={{ margin: 0 }}
             />
           ),
@@ -99,7 +99,7 @@ const Navbar = () => {
             <Lottie
               animationData={Donation}
               loop
-              className="h-12 w-12 shrink-0"
+              className="h-10 w-10 shrink-0"
               style={{ margin: 0 }}
             />
           ),
@@ -114,7 +114,7 @@ const Navbar = () => {
             <Lottie
               animationData={Home}
               loop
-              className="h-12 w-12 shrink-0"
+              className="h-10 w-10 shrink-0"
               style={{ margin: 0 }}
             />
           ),
@@ -126,7 +126,7 @@ const Navbar = () => {
             <Lottie
               animationData={Issues}
               loop
-              className="h-12 w-12 shrink-0"
+              className="h-10 w-10 shrink-0"
               style={{ margin: 0 }}
             />
           ),
