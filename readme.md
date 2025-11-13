@@ -1,84 +1,116 @@
-Readme.md:
- 
+# ProCleaning – Community Clean-Up & Issue Reporting Platform
 
-This project provides a full-stack MERN (MongoDB, Express.js, React.js, Node.js) hands-on development experience, allowing users to report and track environmental/cleanliness-related issues in their local area — such as garbage buildup, broken footpaths, illegal dumping, waterlogging, and more. Users can also request cleanup drives, pay small fees for community services (if applicable), and view their issue history.
-This project emphasizes clean UI using Tailwind CSS, secured routes with Firebase Authentication, and a modern, professional app structure using private routes, protected data, and user authorization.
+ProCleaning is a full-stack MERN (MongoDB, Express.js, React.js, Node.js) application that allows users to **report and track environmental / cleanliness issues** in their local area — such as garbage buildup, broken footpaths, illegal dumping, waterlogging, and more.
 
+Citizens can:
 
-Live Demo: https://b12-a10-masud.netlify.app/
+- Submit detailed issue reports  
+- Request or join clean-up drives  
+- Contribute small amounts to support community services  
+- View and manage their own issues and contributions in one place  
 
-✨ Key Features
-Firebase Authentication
-
-Email/Password sign up & login
-
-Google Sign-In
-
-Update profile (name & avatar) with updateProfile()
-
-Forgot Password flow
-
-Protected Routes
-
-
-Redirects unauthenticated users to Login, then back to their intended page after login
-
-Responsive UI with Tailwind CSS + daisyUI
-
-Modern, accessible components and utility-first styling
-
-Hero Swiper
-
-## Key Features
-
-- ✅ **Report Issues Easily** – Users can submit new clean-up issues with title, description, category, location, image and estimated cost.
-- 🧹 **Browse All Issues** – Visitors can explore all reported issues and see details such as status, required amount, and raised amount.
-- 👤 **My Issues Dashboard** – Logged-in users can manage the issues they created, update information, and track their progress.
-- 💚 **Contribution System** – Users can donate to support specific issues and see their **My Contribution** page with detailed history.
-- 🧾 **PDF Receipts & Reports** – Users can download individual contribution receipts and a full PDF report of all their contributions.
-- 🔐 **Secure Authentication** – Firebase authentication (email/password, etc.) is used to protect user-specific pages and actions.
-- 🌓 **Dark / Light Theme Toggle** – Built-in theme switcher for a better viewing experience in different environments.
-- 📱 **Responsive UI** – Fully responsive design so the site works smoothly on mobile, tablet, and desktop.
+The project focuses on a **clean, modern UI** using Tailwind CSS, **secured routes** with Firebase Authentication, and a structured, real-world app architecture.
 
 ---
 
-## Tech Stack
+## 🔗 Live Demo
 
-- **Frontend:** React, Vite, React Router
-- **Styling:** Tailwind CSS, DaisyUI, Lottie animations ,React-simple-typewriter
-React Awesome reveal 
-
-- **Auth:** Firebase Authentication
-- **Backend API:** Node.js, Express, MongoDB (separate server)
-- **PDF Generation:** jsPDF, jsPDF-autotable
+**Client Live URL:**  
+👉 https://b12-a10-masud.netlify.app/
 
 ---
 
-Micro-interactions & Animations
+## ✨ Core Features
 
-Framer Motion for staggered reveals, hover/tap, toasts, etc.
+### 🧹 Issue Reporting & Tracking
 
-AOS for simple scroll-in effects (used where Motion isn’t)
+- ✅ **Report Issues Easily** – Users can submit new clean-up issues with title, description, category, location, image URL, and estimated cost.
+- 📂 **Issue Categories** – Predefined categories like Garbage, Illegal Construction, Broken Public Property, Road Damage, etc.
+- 🔍 **Browse All Issues** – Visitors can explore all reported issues with filters and view detailed information (status, required amount, raised amount).
+- 🧾 **Issue Details Page** – Each issue has its own detailed page with full description and contribution options.
 
-Toasts & Alerts
+### 👤 User Dashboards
 
-daisyUI toasts
+- 👨‍💻 **My Issues Dashboard** – Logged-in users can see all issues they created, edit/update them, and track their progress.
+- 💚 **My Contribution Page** – Users can view all their donations, including issue titles, categories, amounts, and dates.
+- 🧾 **PDF Receipts & Reports**
+  - Download **single contribution receipts** as PDF.
+  - Export **full contribution history** as a detailed PDF report (powered by `jsPDF` + `jspdf-autotable`).
 
-SweetAlert2 for uninstall confirmations
+---
 
-🛠️ Tech Stack
-React + React Router
+## 🔐 Authentication & Authorization (Firebase)
 
-Firebase Auth
+- **Firebase Authentication** with:
+  - Email / Password sign-up and login
+  - Google Sign-In
+  - Update profile (display name & avatar) using `updateProfile()`
+  - Forgot Password / Reset flow
+- **Protected Routes**
+  - Private routes restrict access to pages like *My Issues*, *My Contribution*, *Add Issues*, etc.
+  - Unauthenticated users are redirected to Login and then back to their original target after successful login.
 
-Tailwind CSS + daisyUI
+---
 
-Swiper
+## 🖼️ UI, Animations & Micro-Interactions
 
-Framer Motion
+- 🎨 **Responsive UI** built with **Tailwind CSS + daisyUI**
+  - Modern, accessible components
+  - Utility-first styling for fast iteration
+- 🌗 **Dark / Light Theme Toggle**
+  - Theme switcher for better viewing experience in different environments.
+- 🎞️ **Lottie Animations**
+  - Used across navbar links and sections for a friendly, interactive feel.
+- ⌨️ **React Simple Typewriter**
+  - Animated typewriter text (e.g., “Clean Drive”) in hero/CTA sections.
+- ✨ **React Awesome Reveal**
+  - Smooth scroll-in effects, fade/slide animations for sections and cards.
+- 🌀 **Swiper (Hero Slider)**
+  - Hero section with carousel/swiper for featured content (if enabled).
+- 🔔 **Toasts & Alerts**
+  - Friendly success/error toasts for actions like login/logout, form submission, etc.
+  - SweetAlert2 or daisyUI modals/toasts can be used for confirmations (e.g., delete/update actions).
 
-AOS (Animate On Scroll)
+---
 
-SweetAlert2
+## 🧱 Tech Stack
 
-(Optional) Animate.css if you enable it globally
+### Frontend
+
+- **React** (with Vite)
+- **React Router** for SPA routing
+- **Tailwind CSS** + **daisyUI** for styling
+- **Lottie-react** for animations
+- **react-simple-typewriter**
+- **react-awesome-reveal**
+- **Swiper** (for carousels / hero sliders)
+
+### Backend
+
+- **Node.js** + **Express.js**
+- **MongoDB** (with a dedicated collection for issues and contributions)
+- RESTful API endpoints for:
+  - Creating and fetching issues
+  - Creating and fetching contributions
+  - Filtering logged-in user data (`/my-issues`, `/my-contribution`, etc.)
+
+### Auth & Security
+
+- **Firebase Authentication**
+  - JWT handled on the client side for protecting routes & API calls
+  - Only authorized users can perform sensitive actions (e.g., editing their own issues).
+
+### Utilities
+
+- **jsPDF** + **jspdf-autotable** – PDF receipts and reports
+- **React Toast Notifications** (e.g., `react-toastify`)
+
+---
+
+## 🚀 Getting Started (Client)
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/your-username/procleaning-client.git
+   cd procleaning-client
