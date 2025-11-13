@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import Container from "../Components/Container";
 import { AuthContext } from "../Provider/AuthProvider";
 
+import Lottie from "lottie-react";
+import Login from "./../animation/Secure Login.json";
+
 const Profile = () => {
   const { user, updateUser } = useContext(AuthContext);
   const [name, setName] = useState("");
@@ -22,14 +25,19 @@ const Profile = () => {
     return (
       <section className="py-16">
         <Container>
-          <div className="max-w-lg mx-auto text-center">
-            <h2 className="text-2xl font-bold">You’re not signed in</h2>
-            <p className="mt-2 text-slate-600">
-              Please{" "}
-              <Link to="/auth/login" className="link text-primary">
-                log in
-              </Link>{" "}
-              to view and edit your profile.
+          
+          <div className="mt-12">
+            <Lottie
+              animationData={Login}
+              loop={true}
+              style={{
+                width: "400px",
+                height: "400px",
+                margin: "0 auto",
+              }}
+            />
+            <p className="text-center text-lg mt-4">
+              Please log in to access your profile.
             </p>
           </div>
         </Container>
@@ -64,7 +72,8 @@ const Profile = () => {
     }
   };
 
-  const preview = photoUrl || "https://cdn-icons-png.freepik.com/512/6596/6596121.png";
+  const preview =
+    photoUrl || "https://cdn-icons-png.freepik.com/512/6596/6596121.png";
 
   return (
     <section className="py-12 md:py-16">
@@ -158,4 +167,3 @@ const Profile = () => {
 };
 
 export default Profile;
-

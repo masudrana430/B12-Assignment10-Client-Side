@@ -11,6 +11,7 @@ import {
   MdOutlineCelebration,
   MdOutlineVolunteerActivism,
 } from "react-icons/md";
+import LoadingSpinnercopy from "../Components/LoadingSpinnercopy";
 
 // use your deployed API base (or localhost while dev)
 const API = "https://b12-a10-copy-server.vercel.app";
@@ -122,9 +123,7 @@ export default function IssueDetails() {
   if (loading || navigation.state === "loading") {
     return (
       <Container>
-        <div className="min-h-[50vh] flex items-center justify-center">
-          <span className="loading loading-spinner loading-lg" />
-        </div>
+        <LoadingSpinnercopy />
       </Container>
     );
   }
