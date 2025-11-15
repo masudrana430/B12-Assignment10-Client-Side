@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Container from "../Components/Container";
 import { AuthContext } from "../Provider/AuthProvider";
+import toast from "react-hot-toast";
 
 const API = (
   import.meta.env.VITE_API_URL || "https://b12-a10-copy-server.vercel.app"
@@ -125,7 +126,10 @@ export default function UpdateIssueModal() {
   const onSubmit = async (e) => {
     e.preventDefault();
     const v = validate();
-    if (v) return setError(v);
+    if (v) {
+      setError(v);
+      return;
+    }
     if (!user) return navigate("/auth/login");
 
     const payload = {
@@ -151,12 +155,20 @@ export default function UpdateIssueModal() {
       });
 
       if (!res.ok) throw new Error(`Update failed (${res.status})`);
-      // const data = await res.json(); // if you want the updated doc
-      // Optionally show a toast here
+
+      // If backend returns updated doc and you want it:
+      // const data = await res.json();
+
+      // ✅ Show success toast
+      toast.success("Issue updated successfully!");
+
+      // ✅ Navigate back to My Issues
       navigate("/my-issues");
     } catch (err) {
       console.error(err);
       setError("Failed to update. Please try again.");
+      // ✅ Error toast
+      toast.error("Failed to update issue.");
     } finally {
       setPending(false);
     }
@@ -172,7 +184,7 @@ export default function UpdateIssueModal() {
     );
   }
 
-  if (error || !issue) {
+  if (error && !issue) {
     return (
       <Container>
         <div className="min-h-[50vh] flex flex-col items-center justify-center gap-3">
@@ -189,7 +201,7 @@ export default function UpdateIssueModal() {
 
   return (
     <Container>
-      <div className=" mb-12 md:mb-16 mt-12 md:mt-16 card bg-base-100 w-full max-w-2xl mx-auto shadow-2xl rounded-2xl">
+      <div className="mb-12 md:mb-16 mt-12 md:mt-16 card bg-base-100 w-full max-w-2xl mx-auto shadow-2xl rounded-2xl">
         <div className="card-body p-6">
           <h2 className="text-2xl font-bold text-center mb-6">Update Issue</h2>
 
@@ -307,14 +319,14 @@ export default function UpdateIssueModal() {
               <button
                 type="submit"
                 className="
-    btn btn-sm
-    border border-[#1a6a3d]
-    bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
-    text-white
-    transition-colors duration-300
-    hover:from-[#48D978] hover:to-[#2B8C4A]
-    disabled:opacity-60 disabled:cursor-not-allowed
-  "
+                  btn btn-sm
+                  border border-[#1a6a3d]
+                  bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+                  text-white
+                  transition-colors duration-300
+                  hover:from-[#48D978] hover:to-[#2B8C4A]
+                  disabled:opacity-60 disabled:cursor-not-allowed
+                "
                 disabled={pending}
               >
                 {pending ? (

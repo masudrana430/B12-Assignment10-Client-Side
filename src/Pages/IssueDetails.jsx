@@ -13,6 +13,9 @@ import {
 } from "react-icons/md";
 import LoadingSpinnercopy from "../Components/LoadingSpinnercopy";
 
+import Lottie from "lottie-react";
+import NoData from "./../animation/No Result Green theme.json";
+
 // use your deployed API base (or localhost while dev)
 const API = "https://b12-a10-copy-server.vercel.app";
 
@@ -288,11 +291,14 @@ export default function IssueDetails() {
                 </span>
               </div>
               <div className="mt-4 flex flex-wrap gap-3">
-                <button className="btn btn-sm border border-[#1a6a3d]
+                <button
+                  className="btn btn-sm border border-[#1a6a3d]
     bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
     text-white font-semibold
     transition-colors duration-300
-    hover:from-[#48D978] hover:to-[#2B8C4A]" onClick={openContribution}>
+    hover:from-[#48D978] hover:to-[#2B8C4A]"
+                  onClick={openContribution}
+                >
                   <MdOutlineVolunteerActivism className="text-xl" />
                   Contribute
                 </button>
@@ -451,7 +457,20 @@ export default function IssueDetails() {
             </div>
           ) : (
             <div className="rounded-xl border bg-base-100 p-6 text-center opacity-80">
-              No contributions yet. Be the first to contribute!
+              <div className="mt-6 flex flex-col items-center">
+                <Lottie
+                  animationData={NoData}
+                  loop={true}
+                  style={{
+                    width: "400px",
+                    height: "400px",
+                    margin: "0 auto",
+                  }}
+                />
+              </div>
+              <p className="text-lg mt-4 font-medium">
+                No contributions yet. Be the first to contribute!
+              </p>
             </div>
           )}
         </div>
