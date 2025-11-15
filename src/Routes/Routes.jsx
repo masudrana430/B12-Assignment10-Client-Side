@@ -30,7 +30,7 @@ import UpdateIssueModal from "../Pages/UpdateIssueModal";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainLayout />,
+    element: <MainLayout />,  
     errorElement: <ErrorPage />,
     hydrateFallbackElement: (
       <div>

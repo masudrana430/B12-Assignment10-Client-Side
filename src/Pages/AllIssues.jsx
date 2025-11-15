@@ -15,6 +15,8 @@ const STATUS_OPTIONS = [
   { value: "resolved", label: "Resolved" },
 ];
 
+const PAGE_SIZE = 6; // 👈 how many cards per page
+
 // Animation variants
 const gridVariants = {
   hidden: { opacity: 1 },
@@ -63,6 +65,15 @@ export default function AllIssues() {
     search: "",
   });
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Helper to update filters & reset page to 1
+  const updateFilters = (patch) => {
+    setFilters((prev) => ({ ...prev, ...patch }));
+    setCurrentPage(1);
+  };
+
   const filtered = useMemo(() => {
     const q = norm(filters.search);
 
@@ -90,14 +101,29 @@ export default function AllIssues() {
     });
   }, [data, filters]);
 
-  const resetFilters = () =>
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+
+  const paginated = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    return filtered.slice(start, end);
+  }, [filtered, currentPage]);
+
+  const resetFilters = () => {
     setFilters({ category: "all", status: "all", search: "" });
+    setCurrentPage(1);
+  };
+
+  const startIndex = filtered.length
+    ? (currentPage - 1) * PAGE_SIZE + 1
+    : 0;
+  const endIndex = Math.min(currentPage * PAGE_SIZE, filtered.length);
 
   return (
     <Container>
       <div className="mb-12 md:mb-16">
         <div className="text-2xl text-center font-bold">All Issues</div>
-        <p className="text-center mb-6">Browse, filter, and search issues.</p>
+        <p className="text-center mb-6">Browse, filter, search, and paginate issues.</p>
 
         {/* Filters */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-6">
@@ -111,7 +137,7 @@ export default function AllIssues() {
                 className="select select-bordered"
                 value={filters.category}
                 onChange={(e) =>
-                  setFilters((f) => ({ ...f, category: e.target.value }))
+                  updateFilters({ category: e.target.value })
                 }
               >
                 {categories.map((c) => (
@@ -131,7 +157,7 @@ export default function AllIssues() {
                 className="select select-bordered"
                 value={filters.status}
                 onChange={(e) =>
-                  setFilters((f) => ({ ...f, status: e.target.value }))
+                  updateFilters({ status: e.target.value })
                 }
               >
                 {STATUS_OPTIONS.map((s) => (
@@ -154,14 +180,14 @@ export default function AllIssues() {
                   placeholder="Search title, location, description…"
                   value={filters.search}
                   onChange={(e) =>
-                    setFilters((f) => ({ ...f, search: e.target.value }))
+                    updateFilters({ search: e.target.value })
                   }
                 />
                 {filters.search ? (
                   <button
                     type="button"
                     className="btn join-item"
-                    onClick={() => setFilters((f) => ({ ...f, search: "" }))}
+                    onClick={() => updateFilters({ search: "" })}
                     aria-label="Clear search"
                   >
                     ✕
@@ -175,47 +201,95 @@ export default function AllIssues() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <button className="btn btn-ghost" onClick={resetFilters}>
+          <div className="flex flex-col items-end gap-2 text-right">
+            <button className="btn btn-ghost btn-sm" onClick={resetFilters}>
               Reset
             </button>
-            <span className="text-sm opacity-70">
-              Showing {filtered.length} of {data.length}
+            <span className="text-xs sm:text-sm opacity-70">
+              Showing{" "}
+              {filtered.length
+                ? `${startIndex}–${endIndex}`
+                : "0"}{" "}
+              of {filtered.length} filtered issues (total {data.length})
             </span>
           </div>
         </div>
 
         {/* Animated Grid */}
         {filtered.length ? (
-          <Motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-            variants={gridVariants}
-            initial="hidden"
-            animate="show"
-            // re-run stagger when filters/search change
-            key={`${filters.category}-${filters.status}-${filters.search}`}
-          >
-            {filtered.map((issue) => (
-              <Motion.div
-                key={issue._id}
-                variants={cardVariants}
-                whileHover={{ y: -6 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              >
-                <IssuesCard issue={issue} />
-              </Motion.div>
-            ))}
-          </Motion.div>
+          <>
+            <Motion.div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+              variants={gridVariants}
+              initial="hidden"
+              animate="show"
+              // re-run stagger when filters/search/page change
+              key={`${filters.category}-${filters.status}-${filters.search}-${currentPage}`}
+            >
+              {paginated.map((issue) => (
+                <Motion.div
+                  key={issue._id}
+                  variants={cardVariants}
+                  whileHover={{ y: -6 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                >
+                  <IssuesCard issue={issue} />
+                </Motion.div>
+              ))}
+            </Motion.div>
+
+            {/* Pagination controls */}
+            {totalPages > 1 && (
+              <div className="flex justify-center mt-8">
+                <div className="join">
+                  <button
+                    className="btn btn-sm join-item"
+                    onClick={() =>
+                      setCurrentPage((p) => Math.max(1, p - 1))
+                    }
+                    disabled={currentPage === 1}
+                  >
+                    « Prev
+                  </button>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <button
+                        key={page}
+                        className={`btn btn-sm join-item ${
+                          page === currentPage ? "btn-active" : ""
+                        }`}
+                        onClick={() => setCurrentPage(page)}
+                      >
+                        {page}
+                      </button>
+                    )
+                  )}
+
+                  <button
+                    className="btn btn-sm join-item"
+                    onClick={() =>
+                      setCurrentPage((p) =>
+                        Math.min(totalPages, p + 1)
+                      )
+                    }
+                    disabled={currentPage === totalPages}
+                  >
+                    Next »
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
         ) : (
           <div className="mt-12">
-          <Lottie
-            animationData={Find}
-            loop={true}
-            style={{ width: "400px", height: "400px", margin: "0 auto" }}
-          />
-          <p className="text-center text-lg mt-4">No issues found.</p>
-        </div>
-          
+            <Lottie
+              animationData={Find}
+              loop={true}
+              style={{ width: "400px", height: "400px", margin: "0 auto" }}
+            />
+            <p className="text-center text-lg mt-4">No issues found.</p>
+          </div>
         )}
       </div>
     </Container>

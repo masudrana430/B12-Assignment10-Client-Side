@@ -92,6 +92,12 @@ export default function MyContribution() {
     [rows]
   );
 
+  const latestDate = useMemo(() => {
+    if (!rows.length) return null;
+    const maxTime = Math.max(...rows.map((r) => new Date(r.when).getTime()));
+    return new Date(maxTime);
+  }, [rows]);
+
   const fmtDate = (d) =>
     d
       ? new Date(d).toLocaleString("en-GB", {
@@ -160,7 +166,7 @@ export default function MyContribution() {
       const autoTableModule = await import("jspdf-autotable");
 
       const jsPDF = jsPDFModule.default;
-      const autoTable = autoTableModule.default || autoTableModule.autoTable; // support both styles
+      const autoTable = autoTableModule.default || autoTableModule.autoTable;
 
       const doc = new jsPDF();
 
@@ -183,7 +189,6 @@ export default function MyContribution() {
         fmtDate(r.when),
       ]);
 
-      // ✅ use autoTable(doc, options) instead of doc.autoTable(...)
       autoTable(doc, {
         head: [["#", "Issue Title", "Category", "Paid Amount", "Date"]],
         body,
@@ -205,90 +210,167 @@ export default function MyContribution() {
   if (loading) {
     return (
       <Container>
-        <LoadingSpinnercopy />
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <LoadingSpinnercopy />
+        </div>
       </Container>
     );
   }
 
   return (
     <Container>
-      <div className="max-w-5xl mx-auto py-8">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h2 className="text-2xl font-bold">My Contributions</h2>
-            <p className="text-sm opacity-70">
-              Total paid:{" "}
-              <span className="font-semibold">{currency(totalPaid)}</span>
-            </p>
-          </div>
-          <button
-            className="
-    btn btn-sm
-    border border-[#1a6a3d]
-    bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
-    text-white font-semibold
+      <div className="min-h-[calc(100vh-120px)] py-8">
+        <div className="max-w-5xl mx-auto space-y-6">
+          {/* Header + Summary */}
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p
+                className="text-sm uppercase tracking-wide bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    bg-clip-text text-transparent
     transition-colors duration-300
-    hover:from-[#48D978] hover:to-[#2B8C4A]
-    disabled:opacity-60 disabled:cursor-not-allowed
-  "
-            disabled={downloading || !rows.length}
-            onClick={downloadAllReport}
-          >
-            {downloading ? "Preparing…" : "Download All (PDF)"}
-          </button>
-        </div>
+    hover:from-[#48D978] hover:to-[#2B8C4A] font-semibold"
+              >
+                Contributions
+              </p>
+              <h2 className="text-3xl md:text-4xl font-bold mt-1">
+                My Contributions
+              </h2>
+              <p className="mt-1 text-sm opacity-70 max-w-md">
+                View your contribution history, download receipts, and export a
+                full PDF report of your support.
+              </p>
+            </div>
 
-        {rows.length ? (
-          <div className="overflow-x-auto">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Issue Title</th>
-                  <th>Category</th>
-                  <th>Paid Amount</th>
-                  <th>Date</th>
-                  <th className="w-40">Download</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((r, i) => (
-                  <tr key={r._id}>
-                    <td>{i + 1}</td>
-                    <td className="max-w-[280px] truncate">{r.title}</td>
-                    <td>{r.category}</td>
-                    <td className="font-semibold">{currency(r.paid)}</td>
-                    <td>{fmtDate(r.when)}</td>
-                    <td>
-                      <button
-                        className="btn btn-sm btn-outline"
-                        onClick={() => downloadReceipt(r)}
-                        disabled={downloading}
-                      >
-                        Receipt (PDF)
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className="stats shadow bg-base-100 border border-base-200/60">
+              <div className="stat">
+                <div className="stat-title">Total Paid</div>
+                <div className="stat-value bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    bg-clip-text text-transparent
+    transition-colors duration-300
+    hover:from-[#48D978] hover:to-[#2B8C4A]">
+                  {currency(totalPaid)}
+                </div>
+              </div>
+              <div className="stat hidden sm:block">
+                <div className="stat-title">Contributions</div>
+                <div className="stat-value bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+    bg-clip-text text-transparent
+    transition-colors duration-300
+    hover:from-[#48D978] hover:to-[#2B8C4A]">{rows.length || 0}</div>
+              </div>
+              <div className="stat hidden md:block">
+                <div className="stat-title">Latest</div>
+                <div className="stat-value text-xs md:text-sm">
+                  {latestDate ? fmtDate(latestDate) : "—"}
+                </div>
+              </div>
+            </div>
           </div>
-        ) : (
-          <div className="mt-12">
-            <Lottie
-              animationData={NoData}
-              loop={true}
-              style={{
-                width: "400px",
-                height: "400px",
-                margin: "0 auto",
-              }}
-            />
-            <p className="text-center text-lg mt-4">
-              You haven’t made any contributions yet.
-            </p>
+
+          {/* Main card */}
+          <div className="card bg-base-100 shadow-xl border border-base-200/60">
+            <div className="card-body p-0">
+              {/* Top bar */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-6 pt-6 pb-4 border-b border-base-200/70">
+                <div>
+                  <h3 className="font-semibold text-lg">
+                    Contribution History
+                  </h3>
+                  <p className="text-sm opacity-70">
+                    Download individual receipts or export everything as a PDF
+                    report.
+                  </p>
+                </div>
+                <button
+                  className="
+                    btn btn-sm
+                    border border-[#1a6a3d]
+                    bg-gradient-to-r from-[#36B864] to-[#1A6A3D]
+                    text-white font-semibold
+                    transition-colors duration-300
+                    hover:from-[#48D978] hover:to-[#2B8C4A]
+                    disabled:opacity-60 disabled:cursor-not-allowed
+                  "
+                  disabled={downloading || !rows.length}
+                  onClick={downloadAllReport}
+                >
+                  {downloading ? "Preparing…" : "Download All (PDF)"}
+                </button>
+              </div>
+
+              {/* Table / Empty state */}
+              {rows.length ? (
+                <div className="overflow-x-auto">
+                  <table className="table table-zebra-zebra">
+                    <thead className="bg-base-200/70 sticky top-0 z-10 text-xs uppercase tracking-wide">
+                      <tr>
+                        <th>#</th>
+                        <th>Issue Title</th>
+                        <th>Category</th>
+                        <th className="text-right">Paid Amount</th>
+                        <th>Date</th>
+                        <th className="w-40 text-center">Receipt</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {rows.map((r, i) => (
+                        <tr key={r._id} className="text-sm">
+                          <td className="align-top pt-4">{i + 1}</td>
+                          <td className="max-w-[260px] align-top pt-4">
+                            <p className="font-medium truncate">{r.title}</p>
+                          </td>
+                          <td className="align-top pt-4">{r.category}</td>
+                          <td className="font-semibold text-right align-top pt-4 whitespace-nowrap">
+                            {currency(r.paid)}
+                          </td>
+                          <td className="align-top pt-4 whitespace-nowrap">
+                            {fmtDate(r.when)}
+                          </td>
+                          <td className="align-top pt-3">
+                            <div className="flex justify-center">
+                              <button
+                                className="
+                                  btn btn-xs sm:btn-sm btn-outline
+                                  border-[#1a6a3d]
+                                  hover:bg-[#1a6a3d] hover:text-white
+                                "
+                                onClick={() => downloadReceipt(r)}
+                                disabled={downloading}
+                              >
+                                Receipt (PDF)
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                <div className="py-10 px-4">
+                  <div className="max-w-md mx-auto flex flex-col items-center">
+                    <Lottie
+                      animationData={NoData}
+                      loop={true}
+                      style={{
+                        width: "260px",
+                        height: "260px",
+                        margin: "0 auto",
+                      }}
+                    />
+                    <p className="text-lg font-semibold mt-4">
+                      You haven’t made any contributions yet.
+                    </p>
+                    <p className="text-sm opacity-70 mt-1 text-center">
+                      When you contribute to an issue, your payment history and
+                      receipts will appear here.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </Container>
   );
