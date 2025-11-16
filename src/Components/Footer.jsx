@@ -52,7 +52,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-[#FAF0DD]">
+    <footer className="bg-gradient-to-t from-[#E7AF80] via-[#F6D7B5] to-[#FAF0DD]">
       {/* top grid */}
       <div className="px-4 sm:px-6 lg:px-8 pt-12 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-5 lg:grid-cols-5 gap-8">

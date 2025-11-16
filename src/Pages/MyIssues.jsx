@@ -83,8 +83,8 @@ const MyIssues = () => {
       {/* Toast container */}
       <Toaster position="top-right" />
 
-      <div className="min-h-[calc(100vh-120px)] py-8">
-        <div className="max-w-6xl mx-auto space-y-6">
+      <div className=" py-8">
+        <div className=" space-y-6">
           {/* Header / summary */}
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>

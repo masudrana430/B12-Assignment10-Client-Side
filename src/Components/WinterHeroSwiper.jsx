@@ -198,19 +198,19 @@ const WinterHeroSwiper = ({ slides = [] }) => {
                       <Lottie
                         animationData={Camera}
                         loop={true}
-                        className="absolute top-0 right-1 w-20 h-20 object-contain drop-shadow pointer-events-none select-none"
+                        className="absolute top-0 right-1 w-20 h-20 object-contain drop-shadow pointer-events-none select-none opacity-80"
                       />
 
                       <Lottie
                         animationData={Earth}
                         loop={true}
-                        className="absolute left-0 top-1/4 -translate-y-1/2 w-20 h-20 object-contain drop-shadow pointer-events-none select-none"
+                        className="absolute left-0 top-1/4 -translate-y-1/2 w-20 h-20 object-contain drop-shadow pointer-events-none select-none opacity-80"
                       />
                       <Lottie
                         animationData={Report}
                         loop={true}
-                        className="absolute right-1 sm:right-0 bottom-0 w-20 h-20 object-contain drop-shadow pointer-events-none select-none"
-                      />
+                        className="absolute right-1 sm:right-0 bottom-0 w-20 h-20 object-contain drop-shadow pointer-events-none select-none opacity-80"
+                      />  
 
                       {/* snow overlay (kept as CSS animation for perf) */}
                       <div className="pointer-events-none absolute inset-0 overflow-hidden">

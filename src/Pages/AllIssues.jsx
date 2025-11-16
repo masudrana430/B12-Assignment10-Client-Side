@@ -121,7 +121,7 @@ export default function AllIssues() {
 
   return (
     <Container>
-      <div className="mb-12 md:mb-16">
+      <div className="mb-12 md:mb-16 ">
         <div className="text-2xl text-center font-bold">All Issues</div>
         <p className="text-center mb-6">Browse, filter, search, and paginate issues.</p>
 
