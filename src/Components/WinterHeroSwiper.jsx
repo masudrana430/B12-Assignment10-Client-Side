@@ -91,7 +91,7 @@ const WinterHeroSwiper = ({ slides = [] }) => {
       ];
 
   return (
-    <section className="bg-slate-50 py-8 md:py-12">
+    <section className=" py-8 md:py-12">
       <div className="px-4 sm:px-6 lg:px-8">
         <Swiper
           modules={[Autoplay, Pagination, Navigation, A11y, EffectFade]}

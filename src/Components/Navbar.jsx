@@ -283,9 +283,7 @@ const Navbar = () => {
               >
                 Login
               </NavLink>
-              <NavLink to="/auth/register" className="btn btn-ghost">
-                Register
-              </NavLink>
+              
             </>
           ) : (
             <div className="dropdown dropdown-end">

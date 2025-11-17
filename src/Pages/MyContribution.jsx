@@ -220,7 +220,7 @@ export default function MyContribution() {
   return (
     <Container>
       <div className=" py-8">
-        <div className="max-w-5xl mx-auto space-y-6">
+        <div className=" space-y-6">
           {/* Header + Summary */}
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>

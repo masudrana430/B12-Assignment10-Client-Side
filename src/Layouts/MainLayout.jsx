@@ -8,6 +8,7 @@ import LoadingSpinnerCopy from "../Components/LoadingSpinnercopy";
 import AOS from "aos";
 import { ToastContainer } from "react-toastify";
 import "aos/dist/aos.css";
+import ScrollToTop from "../Components/ScrollToTop";
 
 const MainLayout = () => {
   const { loading } = useApps();
@@ -23,6 +24,7 @@ const MainLayout = () => {
 
   return (
     <div className="flex min-h-dvh flex-col bg-base-100 text-base-content">
+      <ScrollToTop />
       <header className="sticky top-0 z-50 backdrop-blur bg-base-100 border-b border-base-200">
         <Container>
           <Navbar />
